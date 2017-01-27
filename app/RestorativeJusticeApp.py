@@ -42,8 +42,7 @@ class RestorativeJusticeApp(tk.Tk):
 
         with open('app_files/defaults.json', 'r') as jsonFile:
             self.defaults = json.load(jsonFile)
-            print(self.defaults['PATH'])
-
+            
         self.wm_title('Restorative Justice App -- Produced by Scott Frasier')
         img = PhotoImage(file='app_files/icon.gif')
         self.tk.call('wm', 'iconphoto', self._w, img)
@@ -106,21 +105,22 @@ class MenuBar(tk.Menu):
 
     def select_log_path(self):
         file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
-        self.controller.defaults['PATH'] = askopenfilename(filetypes=file_types,
-                                                           title='Select your Case Log')
+        log_path = askopenfilename(filetypes=file_types, title='Select your Case Log')
 
-        with open('app_files/defaults.json', 'w') as jsonFile:
-            jsonFile.write(json.dumps(self.controller.defaults))
-            file_name = os.path.basename(self.controller.defaults['PATH'])
-            self.controller.frames['OutputFrame'].update_output_text(MESSAGE5.format(file_name))
-            self.controller.frames['ButtonFrame'].select_button.config(state='normal')
+        if log_path:
+            self.controller.defaults['PATH'] =  log_path
+            with open('app_files/defaults.json', 'w') as jsonFile:
+                jsonFile.write(json.dumps(self.controller.defaults))
+                file_name = os.path.basename(self.controller.defaults['PATH'])
+                self.controller.frames['OutputFrame'].update_output_text(MESSAGE5.format(file_name))
+                self.controller.frames['ButtonFrame'].select_button.config(state='normal')
 
     def create_new_log(self):
         file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
         log_path = asksaveasfilename(filetypes=file_types, initialfile='Case_Log', title='Save the Case Log')
-        self.controller.defaults['PATH'] = log_path
-
+        
         if log_path:
+            self.controller.defaults['PATH'] = log_path
             with open('app_files/defaults.json', 'w') as jsonFile:
                 jsonFile.write(json.dumps(self.controller.defaults))
                 log = ReadWriteExcel(self.controller.defaults['PATH'])

@@ -67,7 +67,7 @@ class CaseLog:
                 self.write_index = int(index['INDEX'])
         else:
             index = dict()
-            index['INDEX'] = 2
+            index['INDEX'] = self.write_index
             with open(JSON_PATH, 'w') as outfile:
                 json.dump(index, outfile)
 
