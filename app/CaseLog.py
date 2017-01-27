@@ -8,7 +8,9 @@ from pathlib import Path
 
 from ReadWriteExcel import ReadWriteExcel
 
-LOG_LENGTH = 7
+LOG_LENGTH = 2500
+JSON_PATH = 'app_files/log_index.json'
+# JSON_PATH = 'app_files/test_log_index.json' CHANGE FOR TESTING! 
 
 
 class CaseLog:
@@ -55,22 +57,24 @@ class CaseLog:
             self.lowest_row_index = self.rows_to_check[0]
 
     def open_or_create_index_json(self):
+        # Keeps a persistent index so that the log can roll over at set value.
+        # Stat at 2 so the headers are not overwritten.
 
-        file = Path('app_files/log_index.json')
+        file = Path(JSON_PATH)
         if file.is_file():
-            with open('app_files/log_index.json', 'r') as infile:
+            with open(JSON_PATH, 'r') as infile:
                 index = json.load(infile)
                 self.write_index = int(index['INDEX'])
         else:
             index = dict()
-            index['INDEX'] = 7
-            with open('app_files/log_index.json', 'w') as outfile:
+            index['INDEX'] = 2
+            with open(JSON_PATH, 'w') as outfile:
                 json.dump(index, outfile)
 
     def save_log(self):
         index = dict()
         index['INDEX'] = self.write_index
-        with open('app_files/log_index.json', 'w') as outfile:
+        with open(JSON_PATH, 'w') as outfile:
             json.dump(index, outfile)
 
         self.log.save_workbook()
