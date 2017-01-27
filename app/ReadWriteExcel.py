@@ -83,10 +83,12 @@ class ReadWriteExcel:
             else:
                 self.wb.create_sheet(sheet)
 
-    def write_row(self, row_list, bold=False):
+    def write_row(self, row_list, bold=False, row=None):
         # write a row with each list() item as a cell value
+        # The optional row value makes it possible to overwrite a row. 
+        if not row:
+        	row = self.find_empty_row(1)
         col = 1
-        row = self.find_empty_row(1)
         for val in row_list:
             self.ws.cell(column=col, row=row, value=val.title()).font = Font(bold=bold)
             col += 1

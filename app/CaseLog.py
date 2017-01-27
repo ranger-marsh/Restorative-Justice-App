@@ -3,8 +3,12 @@ Checks the log to see if a case has been previously checked for eligibility.
 If a case appears in the log it checks to see if anything has changed. If it
 has it flags it to be rechecked. 
 '''
+import json
+from pathlib import Path
 
 from ReadWriteExcel import ReadWriteExcel
+
+LOG_LENGTH = 7
 
 
 class CaseLog:
@@ -15,6 +19,8 @@ class CaseLog:
         # rows_to_check get sent to RJSorter.py
         self.rows_to_check = list()
         self.lowest_row_index = 2
+        self.write_index = 2
+        self.open_or_create_index_json()
 
     def create_case_list(self, handler):
         # Make a list of cases from the excel file.
@@ -40,10 +46,31 @@ class CaseLog:
             if lst not in self.previous_case_list:
                 # Adding two accounting for zero index and the header row.
                 self.rows_to_check.append(index + 2)
-                self.log.write_row(lst)
+                self.log.write_row(lst, bold=False, row=self.write_index)
+                self.write_index += 1
+                if self.write_index > LOG_LENGTH:
+                    self.write_index = 2
 
         if self.rows_to_check:
             self.lowest_row_index = self.rows_to_check[0]
 
+    def open_or_create_index_json(self):
+
+        file = Path('app_files/log_index.json')
+        if file.is_file():
+            with open('app_files/log_index.json', 'r') as infile:
+                index = json.load(infile)
+                self.write_index = int(index['INDEX'])
+        else:
+            index = dict()
+            index['INDEX'] = 7
+            with open('app_files/log_index.json', 'w') as outfile:
+                json.dump(index, outfile)
+
     def save_log(self):
+        index = dict()
+        index['INDEX'] = self.write_index
+        with open('app_files/log_index.json', 'w') as outfile:
+            json.dump(index, outfile)
+
         self.log.save_workbook()
