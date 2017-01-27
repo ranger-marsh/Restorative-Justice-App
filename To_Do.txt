@@ -1,8 +1,6 @@
-In CaseLog.py create functionality to not allow file to longer that N rows. 
+Check the headers of incoming files and make sure they are valid. 
 
-Add header validation LERMs report/Log
-
-Threading
+Add Threading so UI does not lock. 
 
 
 
