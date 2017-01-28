@@ -1,4 +1,4 @@
-This application makes a marked improvement on a process that deeply affects individuals. 
+This application makes a marked improvement on a process that deeply affects individuals. Video demo: https://youtu.be/3aCNmxCzXTM 
 
 I was tasked with referring individuals to a restorative justice community court. This court allows people to repair the harm of their crimes without getting criminal record. to learn more about restorative justice visit https://goo.gl/Vcv9Hj. 
 
