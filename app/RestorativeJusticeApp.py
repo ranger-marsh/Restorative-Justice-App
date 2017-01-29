@@ -130,8 +130,10 @@ class MenuBar(tk.Menu):
                 self.controller.frames['ButtonFrame'].select_button.config(state='normal')
 
     def display_defualts(self):
+        self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n')
         for default in self.controller.defaults['DEFAULT_LIST']:
-            self.controller.frames['OutputFrame'].update_output_text('\n' + default + '\n')
+            self.controller.frames['OutputFrame'].update_output_text(default + '\n')
+        self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n\n')
 
     def change_defaults(self):
         self.controller.defaults['DEFAULT_LIST'] = self.controller.frames['SelectionFrame'].current_selection()
