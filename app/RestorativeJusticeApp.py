@@ -86,19 +86,19 @@ class MenuBar(tk.Menu):
 
         caselog = tk.Menu(self, activeborderwidth=1, tearoff=False)
         self.add_cascade(label='Case Log', menu=caselog)
-        caselog.add_command(label='Select Log', command=lambda: self.select_log_path())
+        caselog.add_command(label='Select Log', command=self.select_log_path)
         caselog.add_separator()
-        caselog.add_command(label='Create Log', command=lambda: self.create_new_log())
+        caselog.add_command(label='Create Log', command=self.create_new_log)
 
         ############################## Sub-Menu ##############################
 
         defaults = tk.Menu(self, activeborderwidth=1, tearoff=False)
         self.add_cascade(label='Defaults', menu=defaults)
-        defaults.add_command(label='Display current defaults', command=lambda: self.display_defualts())
+        defaults.add_command(label='Display current defaults', command=self.display_defualts)
         defaults.add_separator()
-        defaults.add_command(label='Make current selections default', command=lambda: self.change_defaults())
+        defaults.add_command(label='Make current selections default', command=self.change_defaults)
         defaults.add_separator()
-        defaults.add_command(label='Restore deaults', command=lambda: self.restore_defaults())
+        defaults.add_command(label='Restore deaults', command=self.restore_defaults)
 
 
     ############################## Helper Functions ##########################
@@ -177,8 +177,8 @@ class ButtonFrame(tk.Frame):
 
         ############################# UI Elements ############################
 
-        self.select_button = ttk.Button(self, text='Select', command=lambda: self.get_path())
-        self.run_button = ttk.Button(self, text='Run', command=lambda: self.controller.AppLogic.run())
+        self.select_button = ttk.Button(self, text='Select', command=self.get_path)
+        self.run_button = ttk.Button(self, text='Run', command= lambda: self.controller.AppLogic.run())
 
         ############################### LAYOUT ###############################
 
