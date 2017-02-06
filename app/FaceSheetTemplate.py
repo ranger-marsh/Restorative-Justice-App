@@ -77,6 +77,8 @@ class FaceSheetTemplate:
     def phone_line(self, phone):
         p = self.document.add_paragraph()
         p.add_run('{}{}'.format('Phone: ', phone))
+        p.add_run().add_break()
+        p.add_run('Email:')
 
     def background_lines(self):
         lines = ['CCAP:', 'CLEAR:', 'LERMs:', 'Notes:']

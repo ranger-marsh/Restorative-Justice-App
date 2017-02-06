@@ -8,7 +8,7 @@ from pathlib import Path
 
 from ReadWriteExcel import ReadWriteExcel
 
-LOG_LENGTH = 2500
+LOG_LENGTH = 5000
 JSON_PATH = 'app_files/log_index.json'
 # JSON_PATH = 'app_files/test_log_index.json' CHANGE FOR TESTING! 
 

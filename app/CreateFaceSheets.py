@@ -3,9 +3,8 @@ Reads the sorted excel file generated from RJSorts.py. Creates a face-sheet
 for each candidate that needs to be backgrounded. It also creates a directory 
 for each Canaanite for later sharing. 
 
-The code in this class could be reduced. I like the option of being able to 
-tweak the text of every category if needed. So I think here the repeated code 
-is OK. 
+The code in this class could be reduced. I like that each section of the 
+face-sheet is explicitly set. So I think here the repeated code is OK. 
 '''
 
 import os
@@ -43,14 +42,16 @@ class CreateFaceSheets:
                 age = self.get_age(row)
                 address = self.format_address(row)
                 phone = self.get_phone_number(row)
-                facesheet = (FaceSheetTemplate(district, case_number, name, sex, race, dob, age, address, phone))
+                facesheet = (FaceSheetTemplate(district, case_number,
+                                               name, sex, race, dob, age, address, phone))
 
                 last_first = self.last_name_first(name)
 
                 if not os.path.exists(out_path + '/FaceSheets/' + last_first):
                     os.makedirs(out_path + '/FaceSheets/' + last_first)
 
-                facesheet.save_facesheet('{}/FaceSheets/{}/{}.docx'.format(out_path, last_first, last_first))
+                facesheet.save_facesheet(
+                    '{}/FaceSheets/{}/{}.docx'.format(out_path, last_first, last_first))
 
     def get_district(self, row):
         index = self.headers.index('reporting district')
@@ -85,18 +86,15 @@ class CreateFaceSheets:
         index = self.headers.index('case subject global subject address')
         return row[index].title()
 
-
     def get_address_apartment(self, row):
         index = self.headers.index(
             'case subject global subject address apartment')
         return row[index].title()
 
-
     def get_address_city(self, row):
         index = self.headers.index(
             'case subject global subject address city')
         return row[index].title()
-
 
     def get_address_state(self, row):
         index = self.headers.index(
@@ -109,11 +107,10 @@ class CreateFaceSheets:
         return row[index]
 
     def format_address(self, row):
-        address_list = [self.get_address(row), self.get_address_city(row), ',', 
-                        self.get_address_state(row), 'APT:', self.get_address_apartment(row),]
-        
-        return ' '.join(address_list)
+        address_list = [self.get_address(row), self.get_address_city(row), ',',
+                        self.get_address_state(row), 'APT:', self.get_address_apartment(row), ]
 
+        return ' '.join(address_list)
 
     def last_name_first(self, name):
         name_list = name.split()
