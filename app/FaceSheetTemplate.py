@@ -81,7 +81,7 @@ class FaceSheetTemplate:
         p.add_run('Email:')
 
     def background_lines(self):
-        lines = ['CCAP:', 'CLEAR:', 'LERMs:', 'Notes:']
+        lines = ['Court:', 'Out of State:', 'Local:', 'Notes:']
         for line in lines:
             p = self.document.add_paragraph()
             p.add_run(line).bold = True
