@@ -42,3 +42,4 @@ class TestRJSorts:
         reader.ws = reader.wb['east']
         results = reader.copy_row(2)
         assert results == expected
+        os.remove(temp)
