@@ -1,19 +1,16 @@
-import unittest
-from ReadWriteExcel  import ReadWriteExcel
+import os
+from ReadWriteExcel import ReadWriteExcel
 
-class ExcelReaderTests(unittest.TestCase):
 
-    def setUp(self):
-        self.reader = ReadWriteExcel('test/test_data/raw_test_data.xlsx')
-        self.writer = ReadWriteExcel('test/test_data/test_write.xlsx')
+class TestReadWriteExcel:
 
-    def tearDown(self):
+    def setup_method(self, method):
+
+        self.reader = ReadWriteExcel('{}/test_data/raw_test_data.xlsx'.format(os.getcwd()))
+        self.writer = ReadWriteExcel('{}/test_data/test_write.xlsx'.format(os.getcwd()))
+
+    def teardown_method(self, method):
         pass
-
-    def test_copy_col(self):
-        results = self.reader.copy_col(5, 1)
-        self.assertEqual('case subject age', results[0])
-        self.assertEqual('26', results[-1])
 
     def test_copy_row(self):
         expected = ['case number',
@@ -36,19 +33,24 @@ class ExcelReaderTests(unittest.TestCase):
                     ]
 
         results = self.reader.copy_row(1)
-        self.assertEqual(expected, results)
+        assert results == expected
+
+    def test_copy_col(self):
+        results = self.reader.copy_col(5, 1)
+        assert results[0] == 'case subject age'
+        assert results[-1] == '26'
 
     def test_find_empty_col(self):
         empty_col = self.reader.find_empty_col(1)
-        self.assertEqual(empty_col, 18)
+        assert empty_col == 18
 
     def test_find_empty_row(self):
         empty_row = self.reader.find_empty_row(1)
-        self.assertEqual(empty_row, 22)
+        assert empty_row == 22
 
     def test_max_row_col(self):
-        self.assertEqual(self.reader.max_row, 21)
-        self.assertEqual(self.reader.max_col, 17)
+        assert self.reader.max_row == 21
+        assert self.reader.max_col == 17
 
     def test_write_row(self):
         test_list = ['0', '1', '2', '3', '4', '5']
@@ -57,7 +59,7 @@ class ExcelReaderTests(unittest.TestCase):
         col = 1
         for list_item in test_list:
             results = self.writer.ws.cell(row=1, column=col).value
-            self.assertEqual(results, list_item)
+            assert results == list_item
             col += 1
 
         test_list_b = ['0', '1', '2', '3', '4', '5', '6']
@@ -66,7 +68,7 @@ class ExcelReaderTests(unittest.TestCase):
         col = 1
         for list_item_b in test_list_b:
             results = self.writer.ws.cell(row=2, column=col).value
-            self.assertEqual(results, list_item_b)
+            assert results == list_item_b
             col += 1
 
     def test_highlight_cell(self):
@@ -76,11 +78,11 @@ class ExcelReaderTests(unittest.TestCase):
 
         for col in range(1, 11):
             if col % 2 == 0:
-                self.assertIsNot(self.writer.ws.cell(
-                    row=1, column=col).style.fill.start_color.index, '00000000')
+                assert self.writer.ws.cell(
+                    row=1, column=col).fill.start_color.index == '00FFFF4C'
             else:
-                self.assertEqual(self.writer.ws.cell(
-                    row=1, column=col).style.fill.start_color.index, '00000000')
+                assert self.writer.ws.cell(
+                    row=1, column=col).fill.start_color.index == '00000000'
 
     def test_build_workbook_template(self):
 
@@ -110,15 +112,8 @@ class ExcelReaderTests(unittest.TestCase):
             self.writer.ws = self.writer.wb[ws]
             self.writer.write_row(headers)
 
-        self.assertListEqual(self.writer.wb.sheetnames, ws_list)
+        assert self.writer.wb.sheetnames == ws_list
 
         for ws in self.writer.wb.sheetnames:
             self.writer.ws = self.writer.wb[ws]
-            self.assertIsNone(self.writer.ws.cell(row=2, column=1).value)
-
-        # if you save the file it must be deleted after every test run 
-        # self.writer.save_workbook()
-
-
-if __name__ == '__main__':
-    unittest.main()
+            assert not self.writer.ws.cell(row=2, column=1).value
