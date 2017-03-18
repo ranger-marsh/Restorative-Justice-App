@@ -1,28 +1,26 @@
 '''
 Checks the log to see if a case has been previously checked for eligibility.
 If a case appears in the log it checks to see if anything has changed. If it
-has it flags it to be rechecked. 
+has it flags it to be rechecked.
 '''
 import json
 from pathlib import Path
-
 from ReadWriteExcel import ReadWriteExcel
 
 LOG_LENGTH = 5000
-JSON_PATH = 'app_files/log_index.json'
-# JSON_PATH = 'app_files/test_log_index.json' CHANGE FOR TESTING! 
 
 
 class CaseLog:
 
-    def __init__(self, log_path):
+    def __init__(self, log_path, test=False):
         self.log = ReadWriteExcel(log_path)
         self.previous_case_list = self.create_case_list(self.log)
         # rows_to_check get sent to RJSorter.py
         self.rows_to_check = list()
         self.lowest_row_index = 2
         self.write_index = 2
-        self.open_or_create_index_json()
+        if not test:
+            self.open_or_create_index_json('app_files/log_index.json')
 
     def create_case_list(self, handler):
         # Make a list of cases from the excel file.
@@ -56,25 +54,25 @@ class CaseLog:
         if self.rows_to_check:
             self.lowest_row_index = self.rows_to_check[0]
 
-    def open_or_create_index_json(self):
+    def open_or_create_index_json(self, json_path):
         # Keeps a persistent index so that the log can roll over at set value.
         # Stat at 2 so the headers are not overwritten.
 
-        file = Path(JSON_PATH)
+        file = Path(json_path)
         if file.is_file():
-            with open(JSON_PATH, 'r') as infile:
+            with open(json_path, 'r') as infile:
                 index = json.load(infile)
                 self.write_index = int(index['INDEX'])
         else:
             index = dict()
             index['INDEX'] = self.write_index
-            with open(JSON_PATH, 'w') as outfile:
+            with open(json_path, 'w') as outfile:
                 json.dump(index, outfile)
 
     def save_log(self):
         index = dict()
         index['INDEX'] = self.write_index
-        with open(JSON_PATH, 'w') as outfile:
+        with open(json_path, 'w') as outfile:
             json.dump(index, outfile)
 
         self.log.save_workbook()

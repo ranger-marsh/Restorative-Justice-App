@@ -8,8 +8,7 @@ class TestRJSorts:
 
     def setup_method(self, method):
         rows_to_check = [i for i in range(2, 22)]
-        self.sorts = RJSorts(
-            '{}/test_data/raw_test_data.xlsx'.format(os.getcwd()), rows_to_check)
+        self.sorts = RJSorts('{}/test_data/raw_test_data.xlsx'.format(os.getcwd()), rows_to_check)
 
     def teardown_method(self, method):
         pass
