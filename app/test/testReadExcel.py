@@ -50,3 +50,9 @@ class TestReadExcel:
         results = self.reader.copy_col(5, 1)
         assert results[0] == 'case subject age'
         assert results[-1] == '26'
+
+    def test_validate(self):
+        bad_headers = ReadExcel('{}/test_data/bad_headers.xlsx'.format(os.getcwd()))
+        assert self.reader.validate()
+        assert not bad_headers.validate()
+

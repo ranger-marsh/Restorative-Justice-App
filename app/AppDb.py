@@ -14,16 +14,24 @@ class AppDb:
         else:
             self.db = sqlite3.connect(test_path)
 
+        self.cursor = self.db.cursor()
+
     def create_table(self):
-        cursor = self.db.cursor()
-        cursor.execute('''
+
+        self.cursor.execute('''
                         CREATE TABLE cases(id INTEGER PRIMARY KEY, case_number TEXT, case_date TEXT,
-                        incident TEXT, age TEXT, arrest_type TEXT, name TEXT, address TEXT, dob TEXT,
-                        phone TEXT, race TEXT, sex  TEXT, district TEXT)
+                        incident TEXT, ori TEXT, age TEXT, arrest_type TEXT, name TEXT,
+                        address TEXT, apartment TEXT, city TEXT, state TEXT, dob TEXT, phone TEXT,
+                        race TEXT, sex TEXT, district TEXT)
                     ''')
         self.db.commit()
 
-
+    def insert_row(self, row):
+        self.cursor.execute(
+            '''INSERT INTO cases(case_number, case_date, incident, ori, age, arrest_type, name,
+                                address, apartment, city, state, dob, phone, race, sex, district)
+                                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', row)
+        self.db.commit()
 
     def close_db(self):
         self.db.close()
