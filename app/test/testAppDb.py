@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from pathlib import Path
-from AppDb import *
+from AppDb import AppDb
 
 
 class TestAppDb:
