@@ -9,7 +9,7 @@ class TestCaseLog:
         self.log.open_or_create_index_json('{}/test_data/test_index.json'.format(os.getcwd()))
 
     def teardown_method(self, method):
-        pass
+        os.remove('{}/test_data/test_index.json'.format(os.getcwd()))
 
     def test_create_case_list(self):
         expected = [['2015-77128059', 'william walker', 'psb', 'west'],
@@ -24,3 +24,12 @@ class TestCaseLog:
             assert expected[index][1] == lst[6]
             assert expected[index][2] == lst[5]
             assert expected[index][3] == lst[16]
+
+    def test_compare_previous_current(self):
+        rows_in_case_log = [2, 4, 12, 13, 14, 21]
+        self.log.compare_previous_current('{}/test_data/raw_test_data.xlsx'.format(os.getcwd()))
+        results = self.log.rows_to_check
+        for row_index in rows_in_case_log:
+            assert row_index in results
+            print(row_index)
+        print(results)
