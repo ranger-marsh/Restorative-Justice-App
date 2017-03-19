@@ -37,5 +37,5 @@ class TestAppDb:
         self.db.close_db()
         db = sqlite3.connect('{}/test_data/temp_db'.format(os.getcwd()))
         cursor = db.execute('select * from cases')
-        assert cursor.fetchone()[1:] == tuple(test_row) # [0] is auto id
-        assert cursor.fetchone()[0] == 2
+        assert cursor.fetchone()[1:] == tuple(test_row) # [0] is the row id
+        assert cursor.fetchone()[0] == 2 # test row id increments.
