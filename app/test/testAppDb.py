@@ -38,10 +38,30 @@ class TestAppDb:
         test_many.append(test_row)
 
         self.db.create_table()
-        self.db.insert_row(test_many)
+        self.db.insert_rows(test_many)
         self.db.close_db()
         db = sqlite3.connect('{}/test_data/temp_db'.format(os.getcwd()))
         cursor = db.execute('select * from cases')
         assert cursor.fetchone()[1:] == tuple(test_row)  # [0] is the row id
         assert cursor.fetchone()[0] == 2  # test row id increments.
         assert cursor.fetchone()[0] == 3  # test row id increments.
+
+    def test_query_db(self):
+        test_row = ['1', '2', '3', '4', '5', '6', '7', '8',
+                    '9', '10', '11', '12', '13', '14', '15', '16', 0]
+        test_rowa = ['1', '2', '3', '4', '5', '6', '7', '8',
+                     '9', '10', '11', '12', '13', '14', '15', '16', 1]
+
+        test_many = list()
+        test_many.append(test_row)
+        test_many.append(test_row)
+        test_many.append(test_rowa)
+        self.db.create_table()
+        self.db.insert_rows(test_many)
+        assert len(self.db.query_db(0)) == 2
+        assert self.db.query_db(0)[0] == (1, '1', '2', '3', '4', '5', '6', '7', '8',
+                                          '9', '10', '11', '12', '13', '14', '15', '16', 0)
+        assert self.db.query_db(0)[1] == (2, '1', '2', '3', '4', '5', '6', '7', '8',
+                                          '9', '10', '11', '12', '13', '14', '15', '16', 0)
+        assert test_rowa not in self.db.query_db(0)
+        self.db.close_db()

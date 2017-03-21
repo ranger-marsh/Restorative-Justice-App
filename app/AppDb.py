@@ -33,5 +33,10 @@ class AppDb:
                                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', row)
         self.db.commit()
 
+    def query_db(self, query):
+        sql = "SELECT * FROM cases WHERE status=?"
+        self.cursor.execute(sql, [(query)])
+        return self.cursor.fetchall()
+
     def close_db(self):
         self.db.close()
