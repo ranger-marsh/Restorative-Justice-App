@@ -19,7 +19,7 @@ class TestAppDb:
 
     def test_create_table(self):
         expected = ['id', 'case_number', 'case_date', 'incident', 'ori', 'age', 'arrest_type',
-                    'name', 'address', 'apartment', 'city', 'state', 'dob', 'phone', 'race', 'sex', 'district','status']
+                    'name', 'address', 'apartment', 'city', 'state', 'dob', 'phone', 'race', 'sex', 'district', 'status']
         self.db.create_table()
         self.db.close_db()
         db = sqlite3.connect('{}/test_data/temp_db'.format(os.getcwd()))
@@ -31,11 +31,17 @@ class TestAppDb:
     def test_write_row(self):
         test_row = ['1', '2', '3', '4', '5', '6', '7', '8',
                     '9', '10', '11', '12', '13', '14', '15', '16', 0]
+
+        test_many = list()
+        test_many.append(test_row)
+        test_many.append(test_row)
+        test_many.append(test_row)
+
         self.db.create_table()
-        self.db.insert_row(test_row)
-        self.db.insert_row(test_row)
+        self.db.insert_row(test_many)
         self.db.close_db()
         db = sqlite3.connect('{}/test_data/temp_db'.format(os.getcwd()))
         cursor = db.execute('select * from cases')
-        assert cursor.fetchone()[1:] == tuple(test_row) # [0] is the row id
-        assert cursor.fetchone()[0] == 2 # test row id increments.
+        assert cursor.fetchone()[1:] == tuple(test_row)  # [0] is the row id
+        assert cursor.fetchone()[0] == 2  # test row id increments.
+        assert cursor.fetchone()[0] == 3  # test row id increments.

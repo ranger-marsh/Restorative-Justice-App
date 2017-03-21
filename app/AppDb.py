@@ -26,15 +26,12 @@ class AppDb:
                     ''')
         self.db.commit()
 
-    def insert_row(self, row):
-        # data = [val for val in row]
-        # data.append(0)
-        self.cursor.execute(
+    def insert_rows(self, row):
+        self.cursor.executemany(
             '''INSERT INTO cases(case_number, case_date, incident, ori, age, arrest_type, name,
                                 address, apartment, city, state, dob, phone, race, sex, district,status)
                                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', row)
         self.db.commit()
-
 
     def close_db(self):
         self.db.close()
