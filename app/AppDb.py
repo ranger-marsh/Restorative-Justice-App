@@ -16,12 +16,6 @@ class AppDb:
             self.db = sqlite3.connect(test_path)
         self.cursor = self.db.cursor()
 
-    def open_csv(self, path):
-        with open(path) as csvfile:
-            reader = list(csv.reader(csvfile, delimiter=','))
-            rows = [[val.strip().lower() for val in row] for row in reader[1:]]
-        return rows
-
     def create_table(self):
 
         self.cursor.execute('''
@@ -58,6 +52,8 @@ class AppDb:
         if results:
             self.cursor.execute("DELETE FROM cases WHERE id=?", (results[0],))
             self.db.commit()
+            return True
+        return False
 
     def close_db(self):
         self.db.close()

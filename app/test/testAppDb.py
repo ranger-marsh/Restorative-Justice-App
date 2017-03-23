@@ -13,16 +13,6 @@ class TestAppDb:
         self.db.close_db()
         os.remove('{}/test_data/temp_db'.format(os.getcwd()))
 
-    def test_open_csv(self):
-        rows = self.db.open_csv('{}/test_data/raw_test_data.csv'.format(os.getcwd()))
-        assert len(rows) == 20
-        for row in rows:
-            for val in row:
-                assert not val.startswith(' ')
-                assert not val.endswith(' ')
-                if val.isalpha():
-                    assert val.islower()
-
     def test_db_creation(self):
         db_file = Path('{}/test_data/temp_db'.format(os.getcwd()))
         assert db_file.is_file()
