@@ -89,22 +89,22 @@ class Test_database_handler_filtering:
         self.cursor = self.db.cursor()
 
         self.test_rowa = ['2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                          '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+                          '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
 
         self.test_rowb = ['2017-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                          '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+                          '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'task force']
 
         test_rowc = ['2017-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Scott Frasier',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
 
-        test_rowd = ['2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', '', 'Rupert Frasier',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+        self.test_rowd = ['2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', '', 'Rupert Frasier',
+                          '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
 
         test_many = list()
         test_many.append(self.test_rowa)
         test_many.append(self.test_rowb)
         test_many.append(test_rowc)
-        test_many.append(test_rowd)
+        test_many.append(self.test_rowd)
 
         database_handler.create_table(self.cursor)
         database_handler.insert_rows(self.cursor, test_many)
@@ -116,21 +116,21 @@ class Test_database_handler_filtering:
 
     def test_check_match_case_name(self):
         assert database_handler.query_status(self.cursor, 0)[0] == (1, '2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central', 0)
+                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0)
         database_handler.check_match_case_name(self.cursor, self.test_rowa)
         assert database_handler.query_status(self.cursor, 0)[0] != (1, '2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central', 0)
+                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0)
 
     def test_check_match_case_name_arrest(self):
         # name different
         a = ['2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Cole',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
         # case-number different
         b = ['2015-5732501', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
         # arrest status different
         c = ['2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'Central']
+             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
 
         assert database_handler.check_match_case_name_arrest(self.cursor, a)
         assert database_handler.check_match_case_name_arrest(self.cursor, b)
@@ -138,6 +138,27 @@ class Test_database_handler_filtering:
         assert not database_handler.check_match_case_name_arrest(self.cursor, self.test_rowb)
 
     def test_offense_types(self):
-        assert 'Drug Incident/Investigation' in database_handler.offence_types(self.cursor)
-        assert 'test' in database_handler.offence_types(self.cursor)
-        assert len(database_handler.offence_types(self.cursor))
+        assert 'Drug Incident/Investigation' in database_handler.offense_types(self.cursor)
+        assert 'test' in database_handler.offense_types(self.cursor)
+        assert len(database_handler.offense_types(self.cursor))
+
+    def test_filter_offenses(self):
+        _test_row = [4, '2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', '', 'Rupert Frasier',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+        _test_rowa = [4, '2019-57325012', '10/11/2015', 'NO', 'NQ4054983', '26', '', 'Rupert Frasier',
+                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+
+        assert not database_handler.filter_offenses(_test_row, set(['test']))
+        assert database_handler.filter_offenses(_test_rowa, set(['test']))
+
+    def test_filter_arrest_types(row):
+        _test_row = [4, '2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', '', 'Rupert Frasier',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+        _test_rowa = [4, '2019-57325012', '10/11/2015', 'NO', 'NQ4054983', '26', '', 'Rupert Frasier',
+                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+
+        assert not database_handler.filter_arrest_types(_test_row)
+        assert database_handler.filter_arrest_types(_test_rowa)
+
+    def est_filter_districs(self):
+        pass

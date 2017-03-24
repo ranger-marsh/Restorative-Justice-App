@@ -55,13 +55,41 @@ def check_match_case_name(cursor, row):
     return False
 
 
-def offence_types(cursor):
+def offense_types(cursor):
     results = query_status(cursor, 0)
-    incidents = list()
-    for row in results:
-        incidents.append(row[3])
-    incidents = list(set(incidents))
+    incidents = set([row[3] for row in results])
     return incidents
+
+
+def fileter_data(cursor, offense_list):
+    status = 0
+    results = query_status(cursor, 0)
+    for row in results:
+        if filter_offenses(row, offense_list):
+            status += 1
+        if filter_arrest_types:
+            status += 10
+        if filter_districts:
+            status += 100
+        if status is not 0:
+            update_status(cursor, 1, row[0])
+
+
+def filter_offenses(row, offense_list):
+    if row[3] not in offense_list:
+        return True
+    return False
+
+
+def filter_arrest_types(row):
+    print(row[6])
+    if not row[6] not in offense_list:
+        return True
+    return False
+
+
+def filter_districts(cursor):
+    pass
 
 
 def main():
