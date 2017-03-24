@@ -13,11 +13,6 @@ class Test_database_handler:
     def teardown_class(cls):
         os.remove(PATH)
 
-    def test_db_creation(self):
-        db = database_handler.create_database(PATH)
-        path = Path(PATH)
-        assert path.is_file()
-
     def test_create_table(self):
         expected = ['id', 'case_number', 'case_date', 'incident', 'ori', 'age', 'arrest_type',
                     'name', 'address', 'apartment', 'city', 'state', 'dob', 'phone', 'race', 'sex',
@@ -82,7 +77,7 @@ class Test_database_handler:
         db.close()
 
 
-class Test_database_handler_filtering:
+class Test_database_handler_filters:
 
     def setup_method(self, method):
         self.db = sqlite3.connect(PATH)
@@ -152,13 +147,69 @@ class Test_database_handler_filtering:
         assert database_handler.filter_offenses(_test_rowa, set(['test']))
 
     def test_filter_arrest_types(row):
-        _test_row = [4, '2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', '', 'Rupert Frasier',
+        _test_row = [4, '2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', 'cited', 'Rupert Frasier',
                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
         _test_rowa = [4, '2019-57325012', '10/11/2015', 'NO', 'NQ4054983', '26', '', 'Rupert Frasier',
-                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'task force', 0]
 
         assert not database_handler.filter_arrest_types(_test_row)
         assert database_handler.filter_arrest_types(_test_rowa)
 
-    def est_filter_districs(self):
-        pass
+    def test_filter_districs(self):
+        _test_row = [4, '2019-57325012', '10/11/2015', 'test', 'NQ4054983', '26', 'cited', 'Rupert Frasier',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0]
+        _test_rowa = [4, '2019-57325012', '10/11/2015', 'NO', 'NQ4054983', '26', '', 'Rupert Frasier',
+                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'task force', 0]
+
+        assert not database_handler.filter_districts(_test_row)
+        assert database_handler.filter_districts(_test_rowa)
+
+
+class Test_database_handler_simulate_run:
+
+    @classmethod
+    def teardown_class(cls):
+        os.remove(PATH)
+
+    def test_filter_data(self):
+        db = sqlite3.connect(PATH)
+        cursor = db.cursor()
+        database_handler.create_table(cursor)
+
+        test_0 = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
+                  '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
+
+        test_1 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
+                  '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
+
+        test_10 = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', '', 'Oliver Coleman',
+                   '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
+
+        test_11 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', '', 'Oliver Coleman',
+                   '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
+
+        test_100 = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'invalid']
+
+        test_101 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'invalid']
+
+        test_110 = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', '', 'Oliver Coleman',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'invalid']
+
+        test_111 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', '', 'Oliver Coleman',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'invalid']
+
+        rows = [test_0, test_1, test_10, test_11, test_100, test_101, test_110, test_111]
+        database_handler.insert_rows(cursor, rows)
+
+        assert len(database_handler.query_status(cursor, 0)) == 8
+        database_handler.fileter_data(cursor, ['valid'])
+
+        assert len(database_handler.query_status(cursor, 0)) == 1
+        assert len(database_handler.query_status(cursor, 1)) == 1
+        assert len(database_handler.query_status(cursor, 10)) == 1
+        assert len(database_handler.query_status(cursor, 11)) == 1
+        assert len(database_handler.query_status(cursor, 100)) == 1
+        assert len(database_handler.query_status(cursor, 101)) == 1
+        assert len(database_handler.query_status(cursor, 111)) == 1

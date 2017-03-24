@@ -1,13 +1,6 @@
 import sqlite3
 
 
-PATH = 'app_files/app_db'
-
-
-def create_database(path=PATH):
-    db = sqlite3.connect(path)
-
-
 def create_table(cursor):
     cursor.execute('''
                     CREATE TABLE cases(id INTEGER PRIMARY KEY, case_number TEXT, case_date TEXT,
@@ -62,17 +55,17 @@ def offense_types(cursor):
 
 
 def fileter_data(cursor, offense_list):
-    status = 0
     results = query_status(cursor, 0)
     for row in results:
+        status = 0
         if filter_offenses(row, offense_list):
             status += 1
-        if filter_arrest_types:
+        if filter_arrest_types(row):
             status += 10
-        if filter_districts:
+        if filter_districts(row):
             status += 100
-        if status is not 0:
-            update_status(cursor, 1, row[0])
+        if status != 0:
+            update_status(cursor, status, row[0])
 
 
 def filter_offenses(row, offense_list):
@@ -82,14 +75,16 @@ def filter_offenses(row, offense_list):
 
 
 def filter_arrest_types(row):
-    print(row[6])
-    if not row[6] not in offense_list:
+    if not row[6]:
         return True
     return False
 
 
-def filter_districts(cursor):
-    pass
+def filter_districts(row):
+    districts = set(['east', 'central', 'west', 'north', 'south'])
+    if row[17] not in districts:
+        return True
+    return False
 
 
 def main():
