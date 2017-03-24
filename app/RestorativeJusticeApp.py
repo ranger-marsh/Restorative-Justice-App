@@ -1,5 +1,7 @@
 import os
 import json
+import sqlite3
+from pathlib import Path
 
 import tkinter as tk
 from tkinter import ttk
@@ -11,28 +13,8 @@ import tkinter.scrolledtext as tkst
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 
-from RJSorts import RJSorts
-from CaseLog import CaseLog
-from ReadWriteExcel import ReadWriteExcel
-from CreateFaceSheets import CreateFaceSheets
-
-MESSAGE1 = ('Before continuing you must select a case log.\n\n'
-            'If a case log does not exist I will help you create one.\n\n'
-            'Click the "Case Log" menu above and select or create a case log.\n\n')
-
-MESSAGE2 = 'Please select the Restorative Justice Excel file generated from LERMs.\n\n'
-
-MESSAGE3 = 'You have selected {} as the report generated from LERMs.\n\n'
-
-MESSAGE4 = 'You have created your Case Log.\n\nPlease select the Restorative Justice Excel file generated from LERMs.\n\n'
-
-MESSAGE5 = 'You have selected {} as your case log.\n\n'
-
-MESSAGE6 = 'Checking the Case Log.\n\n'
-
-MESSAGE7 = 'Sorting the excel file.\n\n'
-
-MESSAGE8 = 'Select the incident types to be considered.\n\n'
+import csv_handler
+import database_handler
 
 
 class RestorativeJusticeApp(tk.Tk):
@@ -42,7 +24,7 @@ class RestorativeJusticeApp(tk.Tk):
 
         with open('app_files/defaults.json', 'r') as jsonFile:
             self.defaults = json.load(jsonFile)
-            
+
         self.wm_title('Restorative Justice App -- Produced by Scott Frasier')
         img = PhotoImage(file='app_files/icon.gif')
         self.tk.call('wm', 'iconphoto', self._w, img)
@@ -69,6 +51,19 @@ class RestorativeJusticeApp(tk.Tk):
         self.config(menu=menubar, pady=10, padx=10)
         self.AppLogic = AppLogic(controller=self)
 
+        db_path = Path('app_files/app_db')
+        if not db_path.is_file():
+            if messagebox.askokcancel('Database not found', 'Would you like to create a database?'):
+                self.db = sqlite3.connect('app_files/app_db')
+                self.cursor = self.db.cursor()
+                database_handler.create_table(self.cursor)
+                self.db.commit()
+            else:
+                quit()
+
+        self.db = sqlite3.connect('app_files/app_db')
+        self.cursor = self.db.cursor()
+
 
 class MenuBar(tk.Menu):
 
@@ -84,14 +79,6 @@ class MenuBar(tk.Menu):
 
         ############################## Sub-Menu ##############################
 
-        caselog = tk.Menu(self, activeborderwidth=1, tearoff=False)
-        self.add_cascade(label='Case Log', menu=caselog)
-        caselog.add_command(label='Select Log', command=self.select_log_path)
-        caselog.add_separator()
-        caselog.add_command(label='Create Log', command=self.create_new_log)
-
-        ############################## Sub-Menu ##############################
-
         defaults = tk.Menu(self, activeborderwidth=1, tearoff=False)
         self.add_cascade(label='Defaults', menu=defaults)
         defaults.add_command(label='Display current defaults', command=self.display_defualts)
@@ -100,34 +87,7 @@ class MenuBar(tk.Menu):
         defaults.add_separator()
         defaults.add_command(label='Restore deaults', command=self.restore_defaults)
 
-
     ############################## Helper Functions ##########################
-
-    def select_log_path(self):
-        file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
-        log_path = askopenfilename(filetypes=file_types, title='Select your Case Log')
-
-        if log_path:
-            self.controller.defaults['PATH'] =  log_path
-            with open('app_files/defaults.json', 'w') as jsonFile:
-                jsonFile.write(json.dumps(self.controller.defaults))
-                file_name = os.path.basename(self.controller.defaults['PATH'])
-                self.controller.frames['OutputFrame'].update_output_text(MESSAGE5.format(file_name))
-                self.controller.frames['ButtonFrame'].select_button.config(state='normal')
-
-    def create_new_log(self):
-        file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
-        log_path = asksaveasfilename(filetypes=file_types, initialfile='Case_Log', title='Save the Case Log')
-        
-        if log_path:
-            self.controller.defaults['PATH'] = log_path
-            with open('app_files/defaults.json', 'w') as jsonFile:
-                jsonFile.write(json.dumps(self.controller.defaults))
-                log = ReadWriteExcel(self.controller.defaults['PATH'])
-                log.create_worksheets(['Case Log'])
-                log.save_workbook()
-                self.controller.frames['OutputFrame'].update_output_text(MESSAGE4)
-                self.controller.frames['ButtonFrame'].select_button.config(state='normal')
 
     def display_defualts(self):
         self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n')
@@ -136,7 +96,8 @@ class MenuBar(tk.Menu):
         self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n\n')
 
     def change_defaults(self):
-        self.controller.defaults['DEFAULT_LIST'] = self.controller.frames['SelectionFrame'].current_selection()
+        self.controller.defaults['DEFAULT_LIST'] = self.controller.frames[
+            'SelectionFrame'].current_selection()
         with open('app_files/defaults.json', 'w') as jsonFile:
             jsonFile.write(json.dumps(self.controller.defaults))
 
@@ -180,7 +141,8 @@ class ButtonFrame(tk.Frame):
         ############################# UI Elements ############################
 
         self.select_button = ttk.Button(self, text='Select', command=self.get_path)
-        self.run_button = ttk.Button(self, text='Run', command= lambda: self.controller.AppLogic.run())
+        self.run_button = ttk.Button(
+            self, text='Run', command=lambda: self.controller.AppLogic.run())
 
         ############################### LAYOUT ###############################
 
@@ -188,12 +150,12 @@ class ButtonFrame(tk.Frame):
         self.run_button.pack(side='right', pady=pad, padx=pad)
         self.select_button.pack(side='right', pady=pad, padx=pad)
         self.run_button.config(state='disabled')
-        self.select_button.config(state='disabled')
+        # self.select_button.config(state='disabled')
 
     ############################## Helper Functions ##########################
 
     def get_path(self):
-        file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
+        file_types = [('csv file ending with .csv', '*.csv'), ]
         lerms_report = askopenfilename(filetypes=file_types)
         if lerms_report:
             self.controller.AppLogic.report_selected(lerms_report)
@@ -228,7 +190,7 @@ class SelectionFrame(tk.Frame):
 
     def update_list(self, selection_list):
         self.listbox.delete(0, 'end')
-        selection_list = list(set(selection_list))
+        selection_list = list(selection_list)
         selection_list.sort()
         for item in selection_list:
             self.listbox.insert('end', item)
@@ -245,44 +207,36 @@ class SelectionFrame(tk.Frame):
 class AppLogic(tk.Frame):
 
     def __init__(self, controller):
-        self.log = None
-        self.sorts = None
         self.controller = controller
-        if os.path.isfile(self.controller.defaults['PATH']):
-            self.controller.frames['ButtonFrame'].select_button.config(state='normal')
-            self.controller.frames['OutputFrame'].update_output_text(MESSAGE2)
-        else:
-            self.controller.frames['OutputFrame'].update_output_text(MESSAGE1)
+        self.controller.frames['OutputFrame'].update_output_text(
+            'Please select the Restorative Justice Excel file generated from LERMs.\n\n')
 
     def report_selected(self, path):
         file_name = os.path.basename(path)
-        self.controller.frames['OutputFrame'].update_output_text(MESSAGE3.format(file_name))
-        self.check_case_log(path)
-        self.create_sorter(path)
+        self.controller.frames['OutputFrame'].update_output_text(
+            'You have selected {} as the report generated from LERMs.\n\n'.format(file_name))
+        rows = csv_handler.open_csv(path)
+        for row in rows:
+            if database_handler.check_match_case_name_arrest(self.controller.cursor, row):
+                database_handler.check_match_case_name(self.controller.cursor, row)
 
-    def check_case_log(self, LERMs_report_path):
-        self.controller.frames['OutputFrame'].update_output_text(MESSAGE6)
-        self.log = CaseLog(self.controller.defaults['PATH'])
-        self.log.compare_previous_current(LERMs_report_path)
-        self.log.save_log()
-
-    def create_sorter(self, path):
-        self.sorts = RJSorts(path, self.log.rows_to_check)
-        selection_list = self.sorts.unsorted.copy_col(self.sorts.headers.index('case occurred incident type') + 1, self.log.lowest_row_index)
+        database_handler.insert_rows(self.controller.cursor, rows)
+        self.controller.db.commit()
+        selection_list = database_handler.offense_types(self.controller.cursor)
         self.controller.frames['SelectionFrame'].update_list(selection_list)
         self.controller.frames['ButtonFrame'].run_button.config(state='normal')
-        self.controller.frames['OutputFrame'].update_output_text(MESSAGE8)
+        self.controller.frames['OutputFrame'].update_output_text(
+            'Select the incident types to be considered and press the Run button.\n\n')
 
     def run(self):
-        self.controller.frames['OutputFrame'].update_output_text(MESSAGE7)
-        self.sorts.sort_dict['case occurred incident type'] = self.controller.frames['SelectionFrame'].current_selection()
-        self.sorts.check_sheet()
-        file_types = [('Excel file ending with .xlsx', '*.xlsx'), ]
-        results_path = asksaveasfilename(filetypes=file_types, initialfile='results', title='Save the Results?')
-        self.sorts.save_results(results_path)
-        facesheets = CreateFaceSheets(results_path)
-        self.controller.frames['OutputFrame'].update_output_text('All Done.')
+        offense_list = self.controller.frames['SelectionFrame'].current_selection()
+        database_handler.fileter_data(self.controller.cursor, offense_list)
+        self.controller.db.commit()
 
+        for row in database_handler.query_status(self.controller.cursor, 0):
+            database_handler.update_status(self.controller.cursor, 1000, row[0])
+            print(row)
+        self.controller.db.commit()
 
 if __name__ == '__main__':
     app = RestorativeJusticeApp()

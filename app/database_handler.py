@@ -8,6 +8,7 @@ def create_table(cursor):
                     address TEXT, apartment TEXT, city TEXT, state TEXT, dob TEXT, phone TEXT,
                     race TEXT, sex TEXT, subject_type TEXT, district TEXT, status INTEGER DEFAULT 0)
                     ''')
+    return None
 
 
 def insert_rows(cursor, row):
@@ -16,6 +17,7 @@ def insert_rows(cursor, row):
                                 address, apartment, city, state, dob, phone, race, sex, subject_type,
                                 district)
                                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', row)
+    return None
 
 
 def query_status(cursor, status):
@@ -28,6 +30,7 @@ def update_status(cursor, status, row_id):
         "SELECT * FROM cases WHERE id=?", [(row_id)]).fetchone()[-1]
     status += curr_status
     cursor.execute("UPDATE cases SET status=? WHERE id=?", (status, row_id))
+    return None
 
 
 def check_match_case_name_arrest(cursor, row):
@@ -44,8 +47,7 @@ def check_match_case_name(cursor, row):
     results = cursor.execute(sql, (row[0], row[6])).fetchone()
     if results:
         cursor.execute("DELETE FROM cases WHERE id=?", (results[0],))
-        return True
-    return False
+    return None
 
 
 def offense_types(cursor):
@@ -66,6 +68,7 @@ def fileter_data(cursor, offense_list):
             status += 100
         if status != 0:
             update_status(cursor, status, row[0])
+    return None
 
 
 def filter_offenses(row, offense_list):
