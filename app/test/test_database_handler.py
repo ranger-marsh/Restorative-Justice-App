@@ -109,12 +109,11 @@ class Test_database_handler_filters:
         self.db.close()
         os.remove(PATH)
 
-    def test_check_match_case_name(self):
-        assert database_handler.query_status(self.cursor, 0)[0] == (1, '2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0)
-        database_handler.check_match_case_name(self.cursor, self.test_rowa)
-        assert database_handler.query_status(self.cursor, 0)[0] != (1, '2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-                                                                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central', 0)
+    def test_remove_duplicates(self):
+        assert len(database_handler.query_status(self.cursor, 0)) == 4
+        database_handler.insert_rows(self.cursor, [self.test_rowa])
+        assert len(database_handler.query_status(self.cursor, 0)) == 5
+        self.db.commit()
 
     def test_check_match_case_name_arrest(self):
         # name different
