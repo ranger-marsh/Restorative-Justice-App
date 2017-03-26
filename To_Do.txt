@@ -1,5 +1,3 @@
-Check the headers of incoming files and make sure they are valid. 
-
 Add Threading so UI does not lock. 
 
 
