@@ -6,7 +6,7 @@ def create_table(cursor):
                     CREATE TABLE cases(id INTEGER PRIMARY KEY, case_number TEXT, case_date TEXT,
                     incident TEXT, ori TEXT, age TEXT, arrest_type TEXT CHECK (length(arrest_type ) > 0), name TEXT,
                     address TEXT, apartment TEXT, city TEXT, state TEXT, dob TEXT, phone TEXT,
-                    race TEXT, sex TEXT, subject_type TEXT, district TEXT, status INTEGER DEFAULT 0)
+                    race TEXT, sex TEXT, subject_type TEXT, district TEXT, status INTEGER DEFAULT 0, UNIQUE(case_number , name))
                     ''')
     return None
 
