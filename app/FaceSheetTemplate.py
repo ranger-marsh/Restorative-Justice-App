@@ -12,14 +12,14 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 class FaceSheetTemplate:
 
-    def __init__(self, district, case_number, name, sex, race, dob, age, address, phone):
+    def __init__(self, district, case_number, name, sex, race, dob, age, address, apt, city, state, phone):
         self.document = Document()
         self.district_line(district)
         self.approval_line()
         self.case_number_line(case_number)
         self.name_line(name)
         self.bio_line(sex, race, dob, age)
-        self.address_line(address)
+        self.address_line(address, apt, city, state)
         self.phone_line(phone)
         self.charge_line()
         self.background_lines()
@@ -72,7 +72,8 @@ class FaceSheetTemplate:
             p.add_run(line)
             p.add_run().add_break()
 
-    def address_line(self, address):
+    def address_line(self, address, apt, city, state):
+        address = f'{address} #{apt} {city}, {state}'
         p = self.document.add_paragraph()
         p.add_run(f'Address: {address.title()}')
 
@@ -95,7 +96,7 @@ class FaceSheetTemplate:
         name = "_".join(name_list)
         return name
 
-    def save_facesheet(self, dir, district=True):
+    def save_facesheet(self, dir, district):
         name = self.last_name_first(self.name)
 
         if district:

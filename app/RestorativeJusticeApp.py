@@ -7,6 +7,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 from tkinter import Menu
+from tkinter import Checkbutton
+from tkinter import IntVar
 from tkinter import PhotoImage
 from tkinter import messagebox
 import tkinter.scrolledtext as tkst
@@ -157,6 +159,17 @@ class ButtonFrame(tk.Frame):
             self, text='Select', command=self.get_path)
         self.run_button = ttk.Button(
             self, text='Run', command=lambda: self.controller.AppLogic.run())
+        self.check_var1 = IntVar()
+        self.check_var2 = IntVar()
+        self.check_var1.set(1)
+        self.check_var2.set(1)
+
+        check_box1 = Checkbutton(self, text='Create Face-Sheets', variable=self.check_var1,
+                                 onvalue=1, offvalue=0, height=5,
+                                 width=15)
+        check_box2 = Checkbutton(self, text='File by District', variable=self.check_var2,
+                                 onvalue=1, offvalue=0, height=5,
+                                 width=15)
 
         ############################### LAYOUT ###############################
 
@@ -164,7 +177,9 @@ class ButtonFrame(tk.Frame):
         self.run_button.pack(side='right', pady=pad, padx=pad)
         self.select_button.pack(side='right', pady=pad, padx=pad)
         self.run_button.config(state='disabled')
-        # self.select_button.config(state='disabled')
+
+        check_box1.pack(side='left')
+        check_box2.pack(side='left')
 
     ############################## Helper Functions ##########################
 
@@ -254,13 +269,19 @@ class AppLogic(tk.Frame):
         database_handler.fileter_data(self.controller.cursor, offense_list)
         self.controller.db.commit()
 
-        results_path = askdirectory(title='Save the Results?')
+        create_face = self.controller.frames['ButtonFrame'].check_var1.get()
+        file_by_district = self.controller.frames[
+            'ButtonFrame'].check_var2.get()
+
+        if create_face:
+            results_path = askdirectory(title='Save the Results?')
 
         for row in database_handler.query_status(self.controller.cursor, 0):
             database_handler.update_status(self.controller.cursor, 100, row[0])
-            facesheet = FaceSheetTemplate(row[17], row[1], row[7], row[15], row[14], row[12],
-                                          row[5], row[8], row[13])
-            facesheet.save_facesheet(results_path)
+            if create_face:
+                facesheet = FaceSheetTemplate(row[17], row[1], row[7], row[15], row[14], row[12],
+                                              row[5], row[8], row[9], row[10], row[11], row[13])
+                facesheet.save_facesheet(results_path, file_by_district)
         self.controller.db.commit()
 
 if __name__ == '__main__':
