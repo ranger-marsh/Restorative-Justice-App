@@ -109,28 +109,6 @@ class Test_database_handler_filters:
         self.db.close()
         os.remove(PATH)
 
-    def test_remove_duplicates(self):
-        assert len(database_handler.query_status(self.cursor, 0)) == 4
-        database_handler.insert_rows(self.cursor, [self.test_rowa])
-        assert len(database_handler.query_status(self.cursor, 0)) == 5
-        self.db.commit()
-
-    def test_check_match_case_name_arrest(self):
-        # name different
-        a = ['2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Cole',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
-        # case-number different
-        b = ['2015-5732501', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', '', 'Oliver Coleman',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
-        # arrest status different
-        c = ['2015-57325012', '10/11/2015', 'Drug Incident/Investigation', 'NQ4054983', '26', 'cited', 'Oliver Coleman',
-             '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968', 'White', 'Male', '', 'central']
-
-        assert database_handler.check_match_case_name_arrest(self.cursor, a)
-        assert database_handler.check_match_case_name_arrest(self.cursor, b)
-        assert database_handler.check_match_case_name_arrest(self.cursor, c)
-        assert not database_handler.check_match_case_name_arrest(self.cursor, self.test_rowb)
-
     def test_offense_types(self):
         assert 'Drug Incident/Investigation' in database_handler.offense_types(self.cursor)
         assert 'test' in database_handler.offense_types(self.cursor)
