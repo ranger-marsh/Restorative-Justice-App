@@ -10,11 +10,12 @@ from tkinter import Menu
 from tkinter import PhotoImage
 from tkinter import messagebox
 import tkinter.scrolledtext as tkst
+from tkinter.filedialog import askdirectory
 from tkinter.filedialog import askopenfilename
-from tkinter.filedialog import asksaveasfilename
 
 import csv_handler
 import database_handler
+from FaceSheetTemplate import FaceSheetTemplate
 
 
 class RestorativeJusticeApp(tk.Tk):
@@ -35,13 +36,17 @@ class RestorativeJusticeApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = dict()
-        self.frames['ButtonFrame'] = ButtonFrame(parent=container, controller=self)
-        self.frames['OutputFrame'] = OutputFrame(parent=container, controller=self)
-        self.frames['SelectionFrame'] = SelectionFrame(parent=container, controller=self)
+        self.frames['ButtonFrame'] = ButtonFrame(
+            parent=container, controller=self)
+        self.frames['OutputFrame'] = OutputFrame(
+            parent=container, controller=self)
+        self.frames['SelectionFrame'] = SelectionFrame(
+            parent=container, controller=self)
 
         self.frames['ButtonFrame'].grid(row=1, column=0, sticky='nsew')
         self.frames['OutputFrame'].grid(row=0, column=0, sticky='nsew')
-        self.frames['SelectionFrame'].grid(row=0, column=1, rowspan=3, sticky='nsew')
+        self.frames['SelectionFrame'].grid(
+            row=0, column=1, rowspan=3, sticky='nsew')
 
         self.frames['ButtonFrame'].config()
         self.frames['OutputFrame'].config()
@@ -81,19 +86,25 @@ class MenuBar(tk.Menu):
 
         defaults = tk.Menu(self, activeborderwidth=1, tearoff=False)
         self.add_cascade(label='Defaults', menu=defaults)
-        defaults.add_command(label='Display current defaults', command=self.display_defualts)
+        defaults.add_command(label='Display current defaults',
+                             command=self.display_defualts)
         defaults.add_separator()
-        defaults.add_command(label='Make current selections default', command=self.change_defaults)
+        defaults.add_command(
+            label='Make current selections default', command=self.change_defaults)
         defaults.add_separator()
-        defaults.add_command(label='Restore deaults', command=self.restore_defaults)
+        defaults.add_command(label='Restore deaults',
+                             command=self.restore_defaults)
 
     ############################## Helper Functions ##########################
 
     def display_defualts(self):
-        self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n')
+        self.controller.frames[
+            'OutputFrame'].update_output_text('-' * 80 + '\n')
         for default in self.controller.defaults['DEFAULT_LIST']:
-            self.controller.frames['OutputFrame'].update_output_text(default + '\n')
-        self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n\n')
+            self.controller.frames[
+                'OutputFrame'].update_output_text(default + '\n')
+        self.controller.frames[
+            'OutputFrame'].update_output_text('-' * 80 + '\n\n')
 
     def change_defaults(self):
         self.controller.defaults['DEFAULT_LIST'] = self.controller.frames[
@@ -102,7 +113,8 @@ class MenuBar(tk.Menu):
             jsonFile.write(json.dumps(self.controller.defaults))
 
     def restore_defaults(self):
-        self.controller.defaults['DEFAULT_LIST'] = self.controller.defaults['RESTORE']
+        self.controller.defaults[
+            'DEFAULT_LIST'] = self.controller.defaults['RESTORE']
         with open('app_files/defaults.json', 'w') as jsonFile:
             jsonFile.write(json.dumps(self.controller.defaults))
 
@@ -115,7 +127,8 @@ class OutputFrame(tk.Frame):
 
         ############################# UI Elements ############################
 
-        self.output = tkst.ScrolledText(self, wrap='word', bg='#000000', foreground='#00ff00')
+        self.output = tkst.ScrolledText(
+            self, wrap='word', bg='#000000', foreground='#00ff00')
 
         ############################### LAYOUT ###############################
 
@@ -140,7 +153,8 @@ class ButtonFrame(tk.Frame):
 
         ############################# UI Elements ############################
 
-        self.select_button = ttk.Button(self, text='Select', command=self.get_path)
+        self.select_button = ttk.Button(
+            self, text='Select', command=self.get_path)
         self.run_button = ttk.Button(
             self, text='Run', command=lambda: self.controller.AppLogic.run())
 
@@ -200,7 +214,8 @@ class SelectionFrame(tk.Frame):
                 self.listbox.select_set(selection_list.index(default))
 
     def current_selection(self):
-        selected = [self.listbox.get(item) for item in self.listbox.curselection()]
+        selected = [self.listbox.get(item)
+                    for item in self.listbox.curselection()]
         return selected
 
 
@@ -214,28 +229,38 @@ class AppLogic(tk.Frame):
     def report_selected(self, path):
         file_name = os.path.basename(path)
         self.controller.frames['OutputFrame'].update_output_text(
-            'You have selected {} as the report generated from LERMs.\n\n'.format(file_name))
+            f'You have selected {file_name} as the report generated from LERMs.\n\n')
         rows = csv_handler.open_csv(path)
-        for row in rows:
-            if database_handler.check_match_case_name_arrest(self.controller.cursor, row):
-                database_handler.check_match_case_name(self.controller.cursor, row)
 
-        database_handler.insert_rows(self.controller.cursor, rows)
-        self.controller.db.commit()
-        selection_list = database_handler.offense_types(self.controller.cursor)
-        self.controller.frames['SelectionFrame'].update_list(selection_list)
-        self.controller.frames['ButtonFrame'].run_button.config(state='normal')
-        self.controller.frames['OutputFrame'].update_output_text(
-            'Select the incident types to be considered and press the Run button.\n\n')
+        if rows:
+            database_handler.insert_rows(self.controller.cursor, rows)
+            self.controller.db.commit()
+            selection_list = database_handler.offense_types(
+                self.controller.cursor)
+
+            self.controller.frames[
+                'SelectionFrame'].update_list(selection_list)
+            self.controller.frames[
+                'ButtonFrame'].run_button.config(state='normal')
+            self.controller.frames['OutputFrame'].update_output_text(
+                'Select the incident types to be considered and press the Run button.\n\n')
+        else:
+            if not messagebox.askokcancel('Bad Headers!', 'Select a new csv file?'):
+                quit()
 
     def run(self):
-        offense_list = self.controller.frames['SelectionFrame'].current_selection()
+        offense_list = self.controller.frames[
+            'SelectionFrame'].current_selection()
         database_handler.fileter_data(self.controller.cursor, offense_list)
         self.controller.db.commit()
 
+        results_path = askdirectory(title='Save the Results?')
+
         for row in database_handler.query_status(self.controller.cursor, 0):
-            database_handler.update_status(self.controller.cursor, 1000, row[0])
-            print(row)
+            database_handler.update_status(self.controller.cursor, 100, row[0])
+            facesheet = FaceSheetTemplate(row[17], row[1], row[7], row[15], row[14], row[12],
+                                          row[5], row[8], row[13])
+            facesheet.save_facesheet(results_path)
         self.controller.db.commit()
 
 if __name__ == '__main__':

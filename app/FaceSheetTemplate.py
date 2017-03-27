@@ -1,11 +1,11 @@
-''' 
-Create a face-sheet with information from the sorted Excel file. 
-This class assumes that all string formating is done before strings are 
-passed to it. The methods are in the order they run and create the document 
-from top down. This class is tested functionally by looking at the document it 
-creates. 
 '''
-
+Create a face-sheet with information from the sorted Excel file.
+This class assumes that all string formating is done before strings are
+passed to it. The methods are in the order they run and create the document
+from top down. This class is tested functionally by looking at the document it
+creates.
+'''
+import os
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
@@ -23,11 +23,13 @@ class FaceSheetTemplate:
         self.phone_line(phone)
         self.charge_line()
         self.background_lines()
+        self.name = name
+        self.district = district
 
     def district_line(self, district):
         p = self.document.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        p.add_run('{}{}'.format('District: ', district)).bold = True
+        p.add_run(f'District: {district.title()}').bold = True
 
     def approval_line(self):
         p = self.document.add_paragraph()
@@ -47,18 +49,18 @@ class FaceSheetTemplate:
 
     def case_number_line(self, case_number):
         p = self.document.add_paragraph()
-        p.add_run('{}{}'.format('Case Number: ', case_number))
+        p.add_run(f'Case Number: {case_number}')
 
     def name_line(self, name):
         p = self.document.add_paragraph()
-        p.add_run('{}{}'.format('Name: ', name))
+        p.add_run(f'Name: {name.title()}')
 
     def bio_line(self, sex, race, dob, age):
         lines = ['Sex:\t', 'Race:\t', 'DOB:\t', 'Age:\t']
         bio_list = [sex, race, dob, age]
         p = self.document.add_paragraph()
         for line, bio in zip(lines, bio_list):
-            p.add_run('{}{}'.format(line, bio))
+            p.add_run(f'{line}{bio.title()}')
             p.add_run().add_break()
 
     def charge_line(self):
@@ -72,20 +74,37 @@ class FaceSheetTemplate:
 
     def address_line(self, address):
         p = self.document.add_paragraph()
-        p.add_run('{}{}'.format('Address: ', address))
+        p.add_run(f'Address: {address.title()}')
 
     def phone_line(self, phone):
         p = self.document.add_paragraph()
-        p.add_run('{}{}'.format('Phone: ', phone))
+        p.add_run(f'Phone: {phone}')
         p.add_run().add_break()
         p.add_run('Email:')
 
     def background_lines(self):
-        lines = ['Court Records:', 'Out of State Records:', 'Local Records:', 'Notes:']
+        lines = ['Court Records:', 'Out of State Records:',
+                 'Local Records:', 'Notes:']
         for line in lines:
             p = self.document.add_paragraph()
             p.add_run(line).bold = True
 
-    def save_facesheet(self, path):
-        self.document.save(path)
+    def last_name_first(self, name):
+        name_list = name.split()
+        name_list.insert(0, name_list.pop())
+        name = "_".join(name_list)
+        return name
 
+    def save_facesheet(self, dir, district=True):
+        name = self.last_name_first(self.name)
+
+        if district:
+            path = f'{dir}/{self.district}/{name}/{name}.docx'
+            if not os.path.isdir(f'{dir}/{self.district}/{name}'):
+                os.makedirs(f'{dir}/{self.district}/{name}')
+        else:
+            path = f'{dir}/{name}/{name}.docx'
+            if not os.path.isdir(f'{dir}/{name}'):
+                os.makedirs(f'{dir}/{name}')
+
+        self.document.save(path)
