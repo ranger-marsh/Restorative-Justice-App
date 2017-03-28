@@ -1,4 +1,4 @@
-Restorative justice can impact individuals and communities. This application is an attempt to streamline part of this process.
+Restorative justice can have a significant impact on individuals and communities. This application is an attempt to streamline part of this process.
 
 I was tasked with referring individuals to a restorative justice community court. This court allows people to repair the harm of their crimes without getting criminal record. to learn more about restorative justice visit [Wikipedia](https://goo.gl/Vcv9Hj). 
 
