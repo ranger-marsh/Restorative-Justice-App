@@ -1,5 +1,6 @@
 This application makes a marked improvement on a process that deeply affects individuals. 
-[![Video Demo]](https://img.https://youtu.be/3aCNmxCzXTM.jpg)](https://youtu.be/3aCNmxCzXTM  "Video Demo]")
+[![Video Demo](https://img.https://youtu.be/3aCNmxCzXTM.jpg)](https://youtu.be/3aCNmxCzXTM  "Video Demo")
+
 
 
 I was tasked with referring individuals to a restorative justice community court. This court allows people to repair the harm of their crimes without getting criminal record. to learn more about restorative justice visit https://goo.gl/Vcv9Hj. 
