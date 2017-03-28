@@ -1,5 +1,5 @@
 This application makes a marked improvement on a process that deeply affects individuals. 
-[![Video Demo](https://img.youtu.be/3aCNmxCzXTM.jpg)](https://youtu.be/3aCNmxCzXTM  "Video Demo")
+[![Video Demo](https://img.youtube.com/vi/3aCNmxCzXTM.jpg)](https://youtu.be/3aCNmxCzXTM  "Video Demo")
 
 
 
