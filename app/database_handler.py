@@ -55,10 +55,12 @@ def offense_types(cursor):
     incidents = set([row[3] for row in results])
     return incidents
 
+
 def receipt(cursor):
-    # Get the rows that where filtered out.
+    # Get the rows that where filtered out selecting the most recent first.
     cursor.execute("SELECT * FROM cases WHERE status < 100")
-    return cursor.fetchall()
+    results = [[row[1], row[7], row[3], row[17]] for row in reversed(cursor.fetchall())]
+    return results
 
 
 def fileter_data(cursor, offense_list):

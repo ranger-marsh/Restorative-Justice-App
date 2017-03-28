@@ -19,14 +19,21 @@ HEADERS = ['case number', 'case occurred from date', 'case occurred incident typ
 
 
 def open_csv(path):
-  # Open the csv file lower and strip all the values. Make sure the csv is
-  # expect format.
+    # Open the csv file lower and strip all the values. Make sure the csv is
+    # expect format.
     with open(path) as csvfile:
         reader = list(csv.reader(csvfile, delimiter=','))
         rows = [[val.strip().lower() for val in row] for row in reader]
         if rows.pop(0) != HEADERS:
             return False
     return rows
+
+
+def write_receipt(path, rows):
+    # Write the receipt to csv file.
+    with open(f'{path}/receipt.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
 
 
 def main():

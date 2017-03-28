@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import json
 import sqlite3
@@ -77,9 +79,9 @@ class MenuBar(tk.Menu):
 
         ############################## Sub-Menu ##############################
 
-        fileMenu = tk.Menu(self, activeborderwidth=1, tearoff=False)
-        self.add_cascade(label='File', menu=fileMenu)
-        fileMenu.add_command(label='Exit', command=self.quit)
+        file_menu = tk.Menu(self, activeborderwidth=1, tearoff=False)
+        self.add_cascade(label='File', menu=file_menu)
+        file_menu.add_command(label='Exit', command=self.quit)
 
         ############################## Sub-Menu ##############################
 
@@ -91,7 +93,18 @@ class MenuBar(tk.Menu):
         defaults.add_separator()
         defaults.add_command(label='Restore deaults', command=self.restore_defaults)
 
+        ############################## Sub-Menu ##############################
+
+        receipt_menu = tk.Menu(self, activeborderwidth=1, tearoff=False)
+        self.add_cascade(label='Receipt', menu=receipt_menu)
+        receipt_menu.add_command(label='Save receipt', command=self.save_receipt)
+
     ############################## Helper Functions ##########################
+
+    def save_receipt(self):
+        receipt_path = askdirectory(title='Save the Receipt?')
+        rows = database_handler.receipt(self.controller.cursor)
+        csv_handler.write_receipt(receipt_path, rows)
 
     def display_defualts(self):
         self.controller.frames[
@@ -191,7 +204,7 @@ class SelectionFrame(tk.Frame):
 
         scrollbar = tk.Scrollbar(self, orient='vertical')
         self.listbox = tk.Listbox(self, yscrollcommand=scrollbar.set, selectmode='multiple',
-                                  width=width,bg='#000000', foreground='#00ff00', selectbackground='#00ff00')
+                                  width=width, bg='#000000', foreground='#00ff00', selectbackground='#00ff00')
 
         self.listbox.config(yscrollcommand=scrollbar.set,)
         scrollbar.config(command=self.listbox.yview)

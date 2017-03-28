@@ -77,7 +77,7 @@ class Test_database_handler:
         cursor = db.cursor()
         database_handler.create_table(cursor)
 
-        test_row = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'name1',
+        test_row = ['2015-57325011', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'name1',
                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
                     'White', 'Male', '', 'central']
 
@@ -85,11 +85,11 @@ class Test_database_handler:
                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
-        test_row2 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name3',
+        test_row2 = ['2015-57325013', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name3',
                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
-        test_row3 = ['2016-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name4',
+        test_row3 = ['2016-57325014', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name4',
                      '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
@@ -102,6 +102,8 @@ class Test_database_handler:
         receipt = database_handler.receipt(cursor)
         assert len(receipt) == 3
 
-        assert tuple(test_row) == receipt[0][1:-1]
-        assert tuple(test_row1) == receipt[1][1:-1]
-        assert tuple(test_row2) == receipt[2][1:-1]
+        assert receipt[0] == ['2015-57325013', 'name3', 'invalid', 'central']
+        assert receipt[1] == ['2015-57325012', 'name2', 'invalid', 'central']
+        assert receipt[2] == ['2015-57325011', 'name1', 'valid', 'central']
+
+

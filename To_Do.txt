@@ -1,4 +1,4 @@
-Add Threading so UI does not lock. 
+No Major features needed. :) 
 
 
 
