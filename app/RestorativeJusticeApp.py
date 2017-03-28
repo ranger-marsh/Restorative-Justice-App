@@ -58,7 +58,7 @@ class RestorativeJusticeApp(tk.Tk):
         self.config(menu=menubar, pady=10, padx=10)
         self.AppLogic = AppLogic(controller=self)
 
-        db_path = Path('app_files/app_db')
+        db_path = Path('app_files/app_db.sqlite3')
         if not db_path.is_file():
             if messagebox.askokcancel('Database not found', 'Would you like to create a database?'):
                 self.db = sqlite3.connect('app_files/app_db.sqlite3')
@@ -68,7 +68,7 @@ class RestorativeJusticeApp(tk.Tk):
             else:
                 quit()
 
-        self.db = sqlite3.connect('app_files/app_db')
+        self.db = sqlite3.connect('app_files/app_db.sqlite3')
         self.cursor = self.db.cursor()
 
 
