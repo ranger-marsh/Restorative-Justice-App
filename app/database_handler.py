@@ -1,12 +1,25 @@
+#!/usr/bin/env python3
+
+"""
+Functions for using the adding, manipulating and consuming data with
+sqlite3. The table is created that does not allow duplicates or empty
+empty strings in key columns. It also filters data based on user
+specified values.
+"""
+
 import sqlite3
 
 
 def create_table(cursor):
+    # Table only accepts unique cases if the case number and name are already
+    # in the database it is not entered. Also cases without a disposition are
+    # not entered this is based on arrest type.
     cursor.execute('''
                     CREATE TABLE cases(id INTEGER PRIMARY KEY, case_number TEXT, case_date TEXT,
-                    incident TEXT, ori TEXT, age TEXT, arrest_type TEXT CHECK (length(arrest_type ) > 0), name TEXT,
-                    address TEXT, apartment TEXT, city TEXT, state TEXT, dob TEXT, phone TEXT,
-                    race TEXT, sex TEXT, subject_type TEXT, district TEXT, status INTEGER DEFAULT 0, UNIQUE(case_number , name))
+                    incident TEXT, ori TEXT, age TEXT, arrest_type TEXT CHECK (length(arrest_type ) > 0),
+                    name TEXT, address TEXT, apartment TEXT, city TEXT, state TEXT, dob TEXT, phone TEXT,
+                    race TEXT, sex TEXT, subject_type TEXT, district TEXT, status INTEGER DEFAULT 0,
+                    UNIQUE(case_number , name))
                     ''')
     return None
 
@@ -28,6 +41,7 @@ def query_status(cursor, status):
 
 
 def update_status(cursor, status, row_id):
+    # status is used as a filter.
     curr_status = cursor.execute(
         "SELECT * FROM cases WHERE id=?", [(row_id)]).fetchone()[-1]
     status += curr_status
@@ -36,12 +50,19 @@ def update_status(cursor, status, row_id):
 
 
 def offense_types(cursor):
+    # Returns a list of offenses of the current run.
     results = query_status(cursor, 0)
     incidents = set([row[3] for row in results])
     return incidents
 
+def receipt(cursor):
+    # Get the rows that where filtered out.
+    cursor.execute("SELECT * FROM cases WHERE status < 100")
+    return cursor.fetchall()
+
 
 def fileter_data(cursor, offense_list):
+    # Change the status to filter data later.
     results = query_status(cursor, 0)
     for row in results:
         status = 0
@@ -55,6 +76,7 @@ def fileter_data(cursor, offense_list):
 
 
 def filter_offenses(row, offense_list):
+    # offense_list is provided by user through UI.
     if row[3] not in offense_list:
         return True
     return False

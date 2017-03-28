@@ -4,14 +4,15 @@ import sqlite3
 from pathlib import Path
 
 import tkinter as tk
+import tkinter.scrolledtext as tkst
+
 from tkinter import ttk
 from tkinter import font
 from tkinter import Menu
-from tkinter import Checkbutton
 from tkinter import IntVar
 from tkinter import PhotoImage
 from tkinter import messagebox
-import tkinter.scrolledtext as tkst
+from tkinter import Checkbutton
 from tkinter.filedialog import askdirectory
 from tkinter.filedialog import askopenfilename
 
@@ -38,17 +39,13 @@ class RestorativeJusticeApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = dict()
-        self.frames['ButtonFrame'] = ButtonFrame(
-            parent=container, controller=self)
-        self.frames['OutputFrame'] = OutputFrame(
-            parent=container, controller=self)
-        self.frames['SelectionFrame'] = SelectionFrame(
-            parent=container, controller=self)
+        self.frames['ButtonFrame'] = ButtonFrame(parent=container, controller=self)
+        self.frames['OutputFrame'] = OutputFrame(parent=container, controller=self)
+        self.frames['SelectionFrame'] = SelectionFrame(parent=container, controller=self)
 
         self.frames['ButtonFrame'].grid(row=1, column=0, sticky='nsew')
         self.frames['OutputFrame'].grid(row=0, column=0, sticky='nsew')
-        self.frames['SelectionFrame'].grid(
-            row=0, column=1, rowspan=3, sticky='nsew')
+        self.frames['SelectionFrame'].grid(row=0, column=1, rowspan=3, sticky='nsew')
 
         self.frames['ButtonFrame'].config()
         self.frames['OutputFrame'].config()
@@ -88,14 +85,11 @@ class MenuBar(tk.Menu):
 
         defaults = tk.Menu(self, activeborderwidth=1, tearoff=False)
         self.add_cascade(label='Defaults', menu=defaults)
-        defaults.add_command(label='Display current defaults',
-                             command=self.display_defualts)
+        defaults.add_command(label='Display current defaults', command=self.display_defualts)
         defaults.add_separator()
-        defaults.add_command(
-            label='Make current selections default', command=self.change_defaults)
+        defaults.add_command(label='Make current selections default', command=self.change_defaults)
         defaults.add_separator()
-        defaults.add_command(label='Restore deaults',
-                             command=self.restore_defaults)
+        defaults.add_command(label='Restore deaults', command=self.restore_defaults)
 
     ############################## Helper Functions ##########################
 
@@ -103,10 +97,8 @@ class MenuBar(tk.Menu):
         self.controller.frames[
             'OutputFrame'].update_output_text('-' * 80 + '\n')
         for default in self.controller.defaults['DEFAULT_LIST']:
-            self.controller.frames[
-                'OutputFrame'].update_output_text(default + '\n')
-        self.controller.frames[
-            'OutputFrame'].update_output_text('-' * 80 + '\n\n')
+            self.controller.frames['OutputFrame'].update_output_text(default + '\n')
+        self.controller.frames['OutputFrame'].update_output_text('-' * 80 + '\n\n')
 
     def change_defaults(self):
         self.controller.defaults['DEFAULT_LIST'] = self.controller.frames[
@@ -115,8 +107,7 @@ class MenuBar(tk.Menu):
             jsonFile.write(json.dumps(self.controller.defaults))
 
     def restore_defaults(self):
-        self.controller.defaults[
-            'DEFAULT_LIST'] = self.controller.defaults['RESTORE']
+        self.controller.defaults['DEFAULT_LIST'] = self.controller.defaults['RESTORE']
         with open('app_files/defaults.json', 'w') as jsonFile:
             jsonFile.write(json.dumps(self.controller.defaults))
 
@@ -129,8 +120,7 @@ class OutputFrame(tk.Frame):
 
         ############################# UI Elements ############################
 
-        self.output = tkst.ScrolledText(
-            self, wrap='word', bg='#000000', foreground='#00ff00')
+        self.output = tkst.ScrolledText(self, wrap='word', bg='#000000', foreground='#00ff00')
 
         ############################### LAYOUT ###############################
 
@@ -165,11 +155,9 @@ class ButtonFrame(tk.Frame):
         self.check_var2.set(1)
 
         check_box1 = Checkbutton(self, text='Create Face-Sheets', variable=self.check_var1,
-                                 onvalue=1, offvalue=0, height=5,
-                                 width=15)
+                                 onvalue=1, offvalue=0, height=5, width=15)
         check_box2 = Checkbutton(self, text='File by District', variable=self.check_var2,
-                                 onvalue=1, offvalue=0, height=5,
-                                 width=15)
+                                 onvalue=1, offvalue=0, height=5, width=15)
 
         ############################### LAYOUT ###############################
 
@@ -203,8 +191,7 @@ class SelectionFrame(tk.Frame):
 
         scrollbar = tk.Scrollbar(self, orient='vertical')
         self.listbox = tk.Listbox(self, yscrollcommand=scrollbar.set, selectmode='multiple',
-                                  width=width, bg='#000000', foreground='#00ff00',
-                                  selectbackground='#00ff00')
+                                  width=width,bg='#000000', foreground='#00ff00', selectbackground='#00ff00')
 
         self.listbox.config(yscrollcommand=scrollbar.set,)
         scrollbar.config(command=self.listbox.yview)
@@ -250,13 +237,11 @@ class AppLogic(tk.Frame):
         if rows:
             database_handler.insert_rows(self.controller.cursor, rows)
             self.controller.db.commit()
-            selection_list = database_handler.offense_types(
-                self.controller.cursor)
+            selection_list = database_handler.offense_types(self.controller.cursor)
 
-            self.controller.frames[
-                'SelectionFrame'].update_list(selection_list)
-            self.controller.frames[
-                'ButtonFrame'].run_button.config(state='normal')
+            self.controller.frames['SelectionFrame'].update_list(selection_list)
+            self.controller.frames['ButtonFrame'].run_button.config(state='normal')
+
             self.controller.frames['OutputFrame'].update_output_text(
                 'Select the incident types to be considered and press the Run button.\n\n')
         else:
@@ -264,14 +249,12 @@ class AppLogic(tk.Frame):
                 quit()
 
     def run(self):
-        offense_list = self.controller.frames[
-            'SelectionFrame'].current_selection()
+        offense_list = self.controller.frames['SelectionFrame'].current_selection()
         database_handler.fileter_data(self.controller.cursor, offense_list)
         self.controller.db.commit()
 
         create_face = self.controller.frames['ButtonFrame'].check_var1.get()
-        file_by_district = self.controller.frames[
-            'ButtonFrame'].check_var2.get()
+        file_by_district = self.controller.frames['ButtonFrame'].check_var2.get()
 
         if create_face:
             results_path = askdirectory(title='Save the Results?')
