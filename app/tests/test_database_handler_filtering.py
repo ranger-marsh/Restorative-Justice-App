@@ -4,7 +4,7 @@ from pathlib import Path
 
 import database_handler
 
-PATH = '{}/test_data/temp_db'.format(os.getcwd())
+PATH = '{}/test_data/temp_db.sqlite3'.format(os.getcwd())
 
 
 class Test_database_handler_filtering:

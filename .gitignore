@@ -88,4 +88,4 @@ ENV/
 .spyderproject
 
 # Rope project settings
-
+*.sqlite3

@@ -61,7 +61,7 @@ class RestorativeJusticeApp(tk.Tk):
         db_path = Path('app_files/app_db')
         if not db_path.is_file():
             if messagebox.askokcancel('Database not found', 'Would you like to create a database?'):
-                self.db = sqlite3.connect('app_files/app_db')
+                self.db = sqlite3.connect('app_files/app_db.sqlite3')
                 self.cursor = self.db.cursor()
                 database_handler.create_table(self.cursor)
                 self.db.commit()
