@@ -58,7 +58,11 @@ class RestorativeJusticeApp(tk.Tk):
         self.AppLogic = AppLogic(controller=self)
 
         db_path = Path('app_files/app_db.sqlite3')
-        if not db_path.is_file():
+        if db_path.is_file():
+            self.db = sqlite3.connect('app_files/app_db.sqlite3')
+            self.cursor = self.db.cursor()
+
+        else:
             if messagebox.askokcancel('Database not found', 'Would you like to create a database?'):
                 self.db = sqlite3.connect('app_files/app_db.sqlite3')
                 self.cursor = self.db.cursor()
@@ -66,9 +70,6 @@ class RestorativeJusticeApp(tk.Tk):
                 self.db.commit()
             else:
                 quit()
-
-        self.db = sqlite3.connect('app_files/app_db.sqlite3')
-        self.cursor = self.db.cursor()
 
 
 class MenuBar(tk.Menu):
@@ -283,3 +284,4 @@ class AppLogic(tk.Frame):
 if __name__ == '__main__':
     app = RestorativeJusticeApp()
     app.mainloop()
+    print('test quit')
