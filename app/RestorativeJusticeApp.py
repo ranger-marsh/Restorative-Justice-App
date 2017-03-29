@@ -280,8 +280,9 @@ class AppLogic(tk.Frame):
                                               row[5], row[8], row[9], row[10], row[11], row[13])
                 facesheet.save_facesheet(results_path, file_by_district)
         self.controller.db.commit()
+        self.controller.frames['OutputFrame'].update_output_text('Finished...\n\n')
 
 if __name__ == '__main__':
     app = RestorativeJusticeApp()
     app.mainloop()
-    print('test quit')
+
