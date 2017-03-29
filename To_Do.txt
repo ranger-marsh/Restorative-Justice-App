@@ -1,4 +1,4 @@
-No Major features needed. :) 
+Refactor data base into relational model. 
 
 
 
