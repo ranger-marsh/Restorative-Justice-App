@@ -100,12 +100,12 @@ class FaceSheetTemplate:
         name = self.last_name_first(self.name)
 
         if district:
-            path = f'{dir}/{self.district}/{name}/{name}.docx'
-            if not os.path.isdir(f'{dir}/{self.district}/{name}'):
-                os.makedirs(f'{dir}/{self.district}/{name}')
+            path = f'{dir}/results/{self.district}/{name}/{name}.docx'
+            if not os.path.isdir(f'{dir}/results/{self.district}/{name}'):
+                os.makedirs(f'{dir}/results/{self.district}/{name}')
         else:
-            path = f'{dir}/{name}/{name}.docx'
-            if not os.path.isdir(f'{dir}/{name}'):
-                os.makedirs(f'{dir}/{name}')
+            path = f'{dir}/results/{name}/{name}.docx'
+            if not os.path.isdir(f'{dir}/results/{name}'):
+                os.makedirs(f'{dir}/results/{name}')
 
         self.document.save(path)
