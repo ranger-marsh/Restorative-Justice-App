@@ -1,5 +1,5 @@
 '''
-Create a face-sheet with information from the sorted Excel file.
+TESET Create a face-sheet with information from the sorted Excel file.
 This class assumes that all string formating is done before strings are
 passed to it. The methods are in the order they run and create the document
 from top down. This class is tested functionally by looking at the document it
