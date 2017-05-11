@@ -1,6 +1,6 @@
 '''
-TESET Create a face-sheet with information from the sorted Excel file.
-This class assumes that all string formating is done before strings are
+Test reate a face-sheet with information from the sorted Excel file.
+This class assumes that all string formatting is done before strings are
 passed to it. The methods are in the order they run and create the document
 from top down. This class is tested functionally by looking at the document it
 creates.
@@ -12,14 +12,15 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 class FaceSheetTemplate:
 
-    def __init__(self, district, case_number, name, sex, race, dob, age, address, apt, city, state, phone):
+    def __init__(self, district, case_number, name, sex, race, dob, age,
+                 address, apt, city, state, zip_code, phone):
         self.document = Document()
         self.district_line(district)
         self.approval_line()
         self.case_number_line(case_number)
         self.name_line(name)
         self.bio_line(sex, race, dob, age)
-        self.address_line(address, apt, city, state)
+        self.address_line(address, apt, city, state, zip_code)
         self.phone_line(phone)
         self.charge_line()
         self.background_lines()
@@ -65,17 +66,23 @@ class FaceSheetTemplate:
 
     def charge_line(self):
         lines = ['Charge Type: State | Municipal',
-                 'Description:', 'Court Date:']
+                 'Description:', 'Court Date:', 'Citation#:']
 
         p = self.document.add_paragraph()
         for line in lines:
             p.add_run(line)
             p.add_run().add_break()
 
-    def address_line(self, address, apt, city, state):
-        address = f'{address} #{apt} {city}, {state}'
+    def apt_str(apt):
+        if len(apt.strip()):
+            apt = f'APT: {apt.title()}'
+            return apt
+        return apt
+
+    def address_line(self, address, apt, city, state, zip_code):
+        address = f'{address.title()} {apt_str(apt)} {city.title()}, {state.capitalize()}, {zip_code}'
         p = self.document.add_paragraph()
-        p.add_run(f'Address: {address.title()}')
+        p.add_run(f'Address: {address}')
 
     def phone_line(self, phone):
         p = self.document.add_paragraph()

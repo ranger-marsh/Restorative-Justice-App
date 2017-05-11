@@ -89,3 +89,17 @@ ENV/
 
 # Rope project settings
 *.sqlite3
+
+# VIM Editor temp files
+# swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
