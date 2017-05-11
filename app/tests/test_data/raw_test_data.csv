@@ -1,21 +1,21 @@
-Case Number,Case Occurred From Date,Case Occurred Incident Type,Case ORI,Case Subject Age,Case Subject Custody Status,Case Subject Global Subject,Case Subject Global Subject Address,Case Subject Global Subject Address Apartment,Case Subject Global Subject Address City,Case Subject Global Subject Address State,Case Subject Global Subject Date Of Birth,Case Subject Global Subject Primary Phone Number,Case Subject Global Subject Race,Case Subject Global Subject Sex,Case Subject Type,Reporting District
-2015-77128059,10/09/2015,Accident,RY4927404,18,PSB,William Walker,27363 Oak Valley Center,o,Los Palacios,MN,3/18/1999,62-(357)219-0456,White,Male,,West
-2015-34942796,10/10/2015,Liquor Law/Bar Check,JX8867831,22,Cited & Released,Anthony Ferguson,2001 Northview Pass,a,Huqiu,LA,05/22/1992,504-(340)699-5100,White,Male,,West
-2015-58485596,10/10/2015,Violation of Court Order,TS9855076,22,PSB,Megan Paterson,8 Sloan Crossing,l72,Palaiochóri,GA,08/09/1995,970-(758)718-2872,White,Female,,North
-2015-28990941,10/10/2015,Domestic Disturbance,DR9329129,22,Cited & Released,Alan Taylor,1 Starling Trail,e4,Baracoa,TX,09/07/1999,420-(887)958-9928,White,Male,,North
-2015-87947397,10/10/2015,Trespass,LY1240499,24,  ,Lily Mills,4913 Kim Park,,,TX,04/30/1997,351-(694)692-0099,White,Male,,Central
-2015-44833968,10/10/2015,Liquor Law,TO5572927,25,   ,Jason Buckland,95111 Aberg Avenue,v69,El Guamo,NY,03/09/1992,63-(395)466-1839,White,Female,,West
-2015-85251490,10/10/2015,Theft,VA7952082,26,,David Hardacre,354 Gale Place,W,Fécamp,TX,03/19/1999,1-(117)881-9479,Black,Male,,Central
-2015-86388247,10/10/2015,Drug Incident Overdose,,24,    ,Claire Terry,3 Farmco Street,Z,Seredeyskiy,TN,01/22/1997,62-(363)889-9491,,Male,,South
-2015-57511954,10/10/2015,Trespass,AI0521305,18,,Nathan Chapman,913 Rowland Alley,S,Huangshi,CO,04/04/1997,1-(976)363-5775,White,Male,,East
-2015-62754183,10/10/2015,Accident w/Injuries,QE0358482,26,Cited & Released,Wanda Black,88 East Street,C,Busan,AK,02/27/1992,371-(346)500-1880,White,,,Central
-2015-76800260,10/10/2015,Adult Arrest Warrant,WN3416783,21,PSB,William Edmunds,512 Trailsway Crossing,D5,Plast,NM,11/03/1999,84-(662)580-9382,White,Male,,South
-2015-12479434,10/10/2015,OMVWI Arrest/Intoxicated Driver,NU8648282,19,Cited & Released,Rachel Roberts,8320 Birchwood Terrace,F6,Baykonyr,GA,05/01/1991,1-(303)982-7344,White,Male,,North
-2015-16531328,10/10/2015,Battery,XL9169998,20,Cited & Released,Michelle Bailey,218 Starling Way,g,Puszczykowo,TX,10/01/1994,86-(159)154-2014,White,Female,,West
-2015-75841199,10/10/2015,Theft Retail,QI2034265,19,Jail,Liam Gill,155 Onsgard Point,y,Rostock,OH,10/10/1992,977-(101)177-6436,White,Male,,East
-2015-68752689,10/10/2015,Accident Property Damage,QO7621766,19,Cited & Released,Thomas Roberts,4391 Brown Place,l31,Yongfeng,TX,06/23/1991,63-(888)388-5381,White,Male,,Central
-2015-31259874,10/10/2015,Neighbor Trouble,HP3922364,22,Cited & Released,Matt Manning,61 Grover Terrace,o20,Trogan Barat,GA,04/01/1999,975-(330)962-9719,White,Male,,West
-2015-88145841,10/10/2015,Probation/Parole,VX2861557,21,Cited & Released,Brandon Wilkins,3404 Redwing Point,N8,Pervomaysk,FL,01/26/1996,86-(796)584-1108,Black,Male,,Central
-2015-12690395,10/10/2015,Accident Hit and Run,LV3613382,,Cited & Released,Mary Buckland,96275 Carey Court,e28,Borbon,DC,12/23/1997,351-(716)660-1858,White,Male,,West
-2015-50234192,10/11/2015,Theft Retail,HB3196879,24,Jail,Gabrielle Underwood,3 Leroy Avenue,X4,Sidomekar,SC,03/20/1998,504-(803)197-7141,White,Male,,Central
-2015-57325012,10/11/2015,Drug Incident/Investigation,NQ4054983,26,,Oliver Coleman,28687 Mallard Hill,c66,Napnapan,CA,10/30/1998,63-(829)189-2968,White,Male,,Central
+Case Number,Case Occurred From Date,Case Occurred Incident Type,Case ORI,Case Subject Age,Case Subject Custody Status,Case Subject Global Subject,Case Subject Global Subject Address,Case Subject Global Subject Address Apartment,Case Subject Global Subject Address City,Case Subject Global Subject Address State,Case Subject Global Subject Address Zip,Case Subject Global Subject Date Of Birth,Case Subject Global Subject Primary Phone Number,Case Subject Global Subject Race,Case Subject Global Subject Sex,Case Subject Type,Reporting District
+2015-77128059,10/09/2015,Accident,RY4927404,18,PSB,William Walker,27363 Oak Valley Center,o,Los Palacios,MN,82156,3/18/1999,62-(357)219-0456,White,Male,,West
+2015-34942796,10/10/2015,Liquor Law/Bar Check,JX8867831,22,Cited & Released,Anthony Ferguson,2001 Northview Pass,a,Huqiu,LA,41013,05/22/1992,504-(340)699-5100,White,Male,,West
+2015-58485596,10/10/2015,Violation of Court Order,TS9855076,22,PSB,Megan Paterson,8 Sloan Crossing,l72,Palaiochóri,GA,52191,08/09/1995,970-(758)718-2872,White,Female,,North
+2015-28990941,10/10/2015,Domestic Disturbance,DR9329129,22,Cited & Released,Alan Taylor,1 Starling Trail,e4,Baracoa,TX,55937,09/07/1999,420-(887)958-9928,White,Male,,North
+2015-87947397,10/10/2015,Trespass,LY1240499,24,  ,Lily Mills,4913 Kim Park,,,TX,80385,04/30/1997,351-(694)692-0099,White,Male,,Central
+2015-44833968,10/10/2015,Liquor Law,TO5572927,25,   ,Jason Buckland,95111 Aberg Avenue,v69,El Guamo,NY,,03/09/1992,63-(395)466-1839,White,Female,,West
+2015-85251490,10/10/2015,Theft,VA7952082,26,,David Hardacre,354 Gale Place,W,Fécamp,TX,79903,03/19/1999,1-(117)881-9479,Black,Male,,Central
+2015-86388247,10/10/2015,Drug Incident Overdose,,24,    ,Claire Terry,3 Farmco Street,Z,Seredeyskiy,TN,22929,01/22/1997,62-(363)889-9491,,Male,,South
+2015-57511954,10/10/2015,Trespass,AI0521305,18,,Nathan Chapman,913 Rowland Alley,S,Huangshi,CO,4622,04/04/1997,1-(976)363-5775,White,Male,,East
+2015-62754183,10/10/2015,Accident w/Injuries,QE0358482,26,Cited & Released,Wanda Black,88 East Street,C,Busan,AK,61550,02/27/1992,371-(346)500-1880,White,,,Central
+2015-76800260,10/10/2015,Adult Arrest Warrant,WN3416783,21,PSB,William Edmunds,512 Trailsway Crossing,D5,Plast,NM,16753,11/03/1999,84-(662)580-9382,White,Male,,South
+2015-12479434,10/10/2015,OMVWI Arrest/Intoxicated Driver,NU8648282,19,Cited & Released,Rachel Roberts,8320 Birchwood Terrace,F6,Baykonyr,GA,43430,05/01/1991,1-(303)982-7344,White,Male,,North
+2015-16531328,10/10/2015,Battery,XL9169998,20,Cited & Released,Michelle Bailey,218 Starling Way,g,Puszczykowo,TX,59432,10/01/1994,86-(159)154-2014,White,Female,,West
+2015-75841199,10/10/2015,Theft Retail,QI2034265,19,Jail,Liam Gill,155 Onsgard Point,y,Rostock,OH,29675,10/10/1992,977-(101)177-6436,White,Male,,East
+2015-68752689,10/10/2015,Accident Property Damage,QO7621766,19,Cited & Released,Thomas Roberts,4391 Brown Place,l31,Yongfeng,TX,75619,06/23/1991,63-(888)388-5381,White,Male,,Central
+2015-31259874,10/10/2015,Neighbor Trouble,HP3922364,22,Cited & Released,Matt Manning,61 Grover Terrace,o20,Trogan Barat,GA,11819,04/01/1999,975-(330)962-9719,White,Male,,West
+2015-88145841,10/10/2015,Probation/Parole,VX2861557,21,Cited & Released,Brandon Wilkins,3404 Redwing Point,N8,Pervomaysk,FL,49020,01/26/1996,86-(796)584-1108,Black,Male,,Central
+2015-12690395,10/10/2015,Accident Hit and Run,LV3613382,,Cited & Released,Mary Buckland,96275 Carey Court,e28,Borbon,DC,,12/23/1997,351-(716)660-1858,White,Male,,West
+2015-50234192,10/11/2015,Theft Retail,HB3196879,24,Jail,Gabrielle Underwood,3 Leroy Avenue,X4,Sidomekar,SC,42164,03/20/1998,504-(803)197-7141,White,Male,,Central
+2015-57325012,10/11/2015,Drug Incident/Investigation,NQ4054983,26,,Oliver Coleman,28687 Mallard Hill,c66,Napnapan,CA,34858,10/30/1998,63-(829)189-2968,White,Male,,Central
