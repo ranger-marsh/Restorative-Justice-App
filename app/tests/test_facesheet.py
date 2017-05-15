@@ -1,4 +1,5 @@
 from docx import Document
+
 import facesheet
 
 
@@ -90,5 +91,15 @@ class Test_facesheet:
         expected_text = [p.text for p in Document('docx_files/background.docx').paragraphs]
         assert results_text == expected_text
 
+    def test_last_name_first(self):
+        name = 'Scott G Frasier'
+        expected = 'Frasier_Scott_G'
+        assert facesheet.last_name_first(name) == expected
 
+    def test_last_name_first_suffix(self):
+        name = 'Scott G Frasier jr.'
+        expected = 'Frasier_jr._Scott_G'
+        assert facesheet.last_name_first(name) == expected
 
+    def test_save_face_sheet(self):
+        pass 

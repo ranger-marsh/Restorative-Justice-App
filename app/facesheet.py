@@ -2,7 +2,7 @@
 Takes in a list of values from the database and creates a facesheet.
 '''
 
-# import os
+import os
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
@@ -98,6 +98,29 @@ def background_line(document):
     for line in lines:
         p = document.add_paragraph()
         p.add_run(line).bold = True
+
+
+def last_name_first(name):
+    suffix = ['II', 'IV', 'JR', 'SR']
+    name_list = name.split()
+    name_list.insert(0, name_list.pop())
+    if name_list[0][:2].upper() in suffix:
+        name_list.insert(0, name_list.pop())
+    name = "_".join(name_list)
+    return name
+
+
+def save_facesheet(document, name, dir, district, district_folders):
+    name = last_name_first(name)
+    if district_folders:
+        path = f'{dir}/results/{district}/{name}/{name}.docx'
+        if not os.path.isdir(f'{dir}/results/{district}/{name}'):
+            os.makedirs(f'{dir}/results/{district}/{name}')
+    else:
+        path = f'{dir}/results/{name}/{name}.docx'
+        if not os.path.isdir(f'{dir}/results/{name}'):
+            os.makedirs(f'{dir}/results/{name}')
+    document.save(path)
 
 
 def main():
