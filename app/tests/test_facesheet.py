@@ -1,5 +1,5 @@
 from docx import Document
-
+import shutil
 import facesheet
 
 
@@ -102,4 +102,26 @@ class Test_facesheet:
         assert facesheet.last_name_first(name) == expected
 
     def test_save_face_sheet(self):
-        pass 
+        info_dict = facesheet.parse_row(self.row)
+        document = Document('docx_files/background.docx')
+        facesheet.save_facesheet(document, 'docx_files', info_dict['name'], info_dict['district'], False)
+        results_text = [p.text for p in self.document.paragraphs]
+        expected_text = [p.text for p in Document('docx_files/results/Walker_William/Walker_William.docx').paragraphs]
+        assert results_text == expected_text
+        shutil.rmtree('docx_files/results')
+
+    def test_save_face_sheet_district_sort(self):
+        info_dict = facesheet.parse_row(self.row)
+        document = Document('docx_files/background.docx')
+        facesheet.save_facesheet(document, 'docx_files', info_dict['name'], info_dict['district'], True)
+        results_text = [p.text for p in self.document.paragraphs]
+        expected_text = [p.text for p in Document('docx_files/results/West/Walker_William/Walker_William.docx').paragraphs]
+        assert results_text == expected_text
+        shutil.rmtree('docx_files/results')
+
+    def test_assemble_sheet(self):
+        facesheet.assemble_sheet(self.row, 'docx_files', False)
+        results_text = [p.text for p in self.document.paragraphs]
+        expected_text = [p.text for p in Document('docx_files/results/Walker_William/Walker_William.docx').paragraphs]
+        assert results_text == expected_text
+        shutil.rmtree('docx_files/results')

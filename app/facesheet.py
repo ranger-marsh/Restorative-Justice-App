@@ -110,17 +110,31 @@ def last_name_first(name):
     return name
 
 
-def save_facesheet(document, name, dir, district, district_folders):
+def save_facesheet(document, directory, name, district, district_folders):
     name = last_name_first(name)
     if district_folders:
-        path = f'{dir}/results/{district}/{name}/{name}.docx'
-        if not os.path.isdir(f'{dir}/results/{district}/{name}'):
-            os.makedirs(f'{dir}/results/{district}/{name}')
+        path = f'{directory}/results/{district}/{name}/{name}.docx'
+        if not os.path.isdir(f'{directory}/results/{district}/{name}'):
+            os.makedirs(f'{directory}/results/{district}/{name}')
     else:
-        path = f'{dir}/results/{name}/{name}.docx'
-        if not os.path.isdir(f'{dir}/results/{name}'):
-            os.makedirs(f'{dir}/results/{name}')
+        path = f'{directory}/results/{name}/{name}.docx'
+        if not os.path.isdir(f'{directory}/results/{name}'):
+            os.makedirs(f'{directory}/results/{name}')
     document.save(path)
+
+
+def assemble_sheet(row_list, directory, district_folders):
+    info_dict = parse_row(row_list)
+    document = Document()
+    district_line(document, info_dict['district'])
+    approval_line(document)
+    case_number_line(document, info_dict['case_number'])
+    name_line(document, info_dict['name'])
+    bio_line(document, info_dict['sex'], info_dict['race'], info_dict['DOB'], info_dict['age'])
+    charge_line(document)
+    phone_line(document, info_dict['phone'])
+    background_line(document)
+    save_facesheet(document, directory, info_dict['name'], info_dict['district'], district_folders)
 
 
 def main():
