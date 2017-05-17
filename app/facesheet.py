@@ -9,7 +9,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 def assemble_address(street, apartment, city, state, zip_code):
     address = street.title()
-    address += f' APT: {apartment.title()}'
+    if apartment:
+        address += f' APT: {apartment.title()}'
     address += f' {city.title()}, '
     address += state.upper()
     address += ' ' + zip_code
