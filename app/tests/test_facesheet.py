@@ -94,7 +94,6 @@ class Test_facesheet:
 
     def test_background_line(self):
         facesheet.background_line(self.document)
-        self.document.save('docx_files/background.docx')
         results_text = [p.text for p in self.document.paragraphs]
         expected_text = [p.text for p in Document('docx_files/background.docx').paragraphs]
         assert results_text == expected_text
