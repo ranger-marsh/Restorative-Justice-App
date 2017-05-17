@@ -30,7 +30,7 @@ def parse_row(row_list):
             'phone': row_list[14],
             'race': row_list[15].title(),
             'sex': row_list[16].title(),
-            'district': row_list[17].title()}
+            'district': row_list[18].title()}
     return info
 
 
@@ -85,6 +85,11 @@ def charge_line(document):
         p.add_run().add_break()
 
 
+def address_line(document, address):
+        p = document.add_paragraph()
+        p.add_run(f'Address: {address}')
+
+
 def phone_line(document, phone):
     p = document.add_paragraph()
     p.add_run(f'Phone: {phone}')
@@ -132,6 +137,7 @@ def assemble_sheet(row_list, directory, district_folders):
     name_line(document, info_dict['name'])
     bio_line(document, info_dict['sex'], info_dict['race'], info_dict['DOB'], info_dict['age'])
     charge_line(document)
+    address_line(document, info_dict['address'])
     phone_line(document, info_dict['phone'])
     background_line(document)
     save_facesheet(document, directory, info_dict['name'], info_dict['district'], district_folders)

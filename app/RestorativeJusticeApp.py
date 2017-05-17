@@ -20,7 +20,7 @@ from tkinter.filedialog import askopenfilename
 
 import csv_handler
 import database_handler
-from FaceSheetTemplate import FaceSheetTemplate
+import facesheet
 
 
 class RestorativeJusticeApp(tk.Tk):
@@ -276,11 +276,11 @@ class AppLogic(tk.Frame):
         for row in database_handler.query_status(self.controller.cursor, 0):
             database_handler.update_status(self.controller.cursor, 100, row[0])
             if create_face:
-                facesheet = FaceSheetTemplate(row[17], row[1], row[7], row[15], row[14], row[12],
-                                              row[5], row[8], row[9], row[10], row[11], row[13])
-                facesheet.save_facesheet(results_path, file_by_district)
+                facesheet.assemble_sheet(row, results_path, file_by_district)
+
         self.controller.db.commit()
         self.controller.frames['OutputFrame'].update_output_text('Finished...\n\n')
+
 
 if __name__ == '__main__':
     app = RestorativeJusticeApp()

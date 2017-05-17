@@ -10,7 +10,7 @@ class Test_facesheet:
         self.row = [1, '2015-77128059', '10/09/2015', 'accident', 'ry4927404',
                     '18', 'psb', 'william walker', '27363 oak valley center',
                     'a15', 'los palacios', 'mn', '82156', '3/18/1999',
-                    '357-219-0456', 'white', 'male', 'west', 1]
+                    '357-219-0456', 'white', 'male', 'subject_type', 'west', 1]
         self.document = Document()
 
     @classmethod
@@ -78,7 +78,14 @@ class Test_facesheet:
         expected_text = [p.text for p in Document('docx_files/charge.docx').paragraphs]
         assert results_text == expected_text
 
-    def test_phone_list(self):
+    def test_address_line(self):
+        info_dict = facesheet.parse_row(self.row)
+        facesheet.address_line(self.document, info_dict['address'])
+        results_text = [p.text for p in self.document.paragraphs]
+        expected_text = [p.text for p in Document('docx_files/address.docx').paragraphs]
+        assert results_text == expected_text
+
+    def test_phone_line(self):
         info_dict = facesheet.parse_row(self.row)
         facesheet.phone_line(self.document, info_dict['phone'])
         results_text = [p.text for p in self.document.paragraphs]
@@ -87,6 +94,7 @@ class Test_facesheet:
 
     def test_background_line(self):
         facesheet.background_line(self.document)
+        self.document.save('docx_files/background.docx')
         results_text = [p.text for p in self.document.paragraphs]
         expected_text = [p.text for p in Document('docx_files/background.docx').paragraphs]
         assert results_text == expected_text
