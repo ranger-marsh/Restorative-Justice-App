@@ -12,6 +12,7 @@ HEADERS = ['case number', 'case occurred from date', 'case occurred incident typ
            'case subject age', 'case subject custody status', 'case subject global subject',
            'case subject global subject address', 'case subject global subject address apartment',
            'case subject global subject address city', 'case subject global subject address state',
+           'case subject global subject address zip',
            'case subject global subject date of birth',
            'case subject global subject primary phone number',
            'case subject global subject race', 'case subject global subject sex',

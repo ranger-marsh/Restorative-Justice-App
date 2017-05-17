@@ -13,7 +13,7 @@ class Test_database_handler:
 
     def test_create_table(self):
         expected = ['id', 'case_number', 'case_date', 'incident', 'ori', 'age', 'arrest_type',
-                    'name', 'address', 'apartment', 'city', 'state', 'dob', 'phone', 'race', 'sex',
+                    'name', 'address', 'apartment', 'city', 'state', 'zip', 'dob', 'phone', 'race', 'sex',
                     'subject_type', 'district', 'status']
 
         db = sqlite3.connect(PATH)
@@ -31,19 +31,19 @@ class Test_database_handler:
         database_handler.create_table(cursor)
 
         test_row = ['1', '2', '3', '4', '5', '6', '7', '8',
-                    '9', '10', '11', '12', '13', '14', '15', '16', '17']
+                    '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
 
         test_row1 = ['10', '2', '3', '4', '5', '6', '7', '8',
-                     '9', '10', '11', '12', '13', '14', '15', '16', '17']
+                     '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
 
         database_handler.insert_rows(cursor, [test_row, test_row1])
 
         assert len(database_handler.query_status(cursor, 0)) == 2
         assert database_handler.query_status(cursor, 0)[0] == (1, '1', '2', '3', '4', '5', '6', '7', '8',
-                                                               '9', '10', '11', '12', '13', '14', '15', '16', '17', 0)
+                                                               '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', 0)
 
         assert database_handler.query_status(cursor, 0)[1] == (2, '10', '2', '3', '4', '5', '6', '7', '8',
-                                                               '9', '10', '11', '12', '13', '14', '15', '16', '17', 0)
+                                                               '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', 0)
 
     def test_offense_types(self):
 
@@ -52,15 +52,15 @@ class Test_database_handler:
         database_handler.create_table(cursor)
 
         test_row = ['2015-57325012', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'name1',
-                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                     'White', 'Male', '', 'central']
 
         test_row1 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name2',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
         test_row2 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name3',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
         database_handler.insert_rows(cursor, [test_row, test_row1, test_row2])
@@ -78,19 +78,19 @@ class Test_database_handler:
         database_handler.create_table(cursor)
 
         test_row = ['2015-57325011', '10/11/2015', 'valid', 'NQ4054983', '26', 'cited', 'name1',
-                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                    '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                     'White', 'Male', '', 'central']
 
         test_row1 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name2',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
         test_row2 = ['2015-57325013', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name3',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
         test_row3 = ['2016-57325014', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'name4',
-                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                     '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                      'White', 'Male', '', 'central']
 
         database_handler.insert_rows(cursor, [test_row, test_row1, test_row2, test_row3])

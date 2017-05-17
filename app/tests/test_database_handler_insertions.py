@@ -17,11 +17,11 @@ class Test_database_handler_insertions:
         database_handler.create_table(cursor)
 
         notnull = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited',
-                   'Oliver Coleman', '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998',
+                   'Oliver Coleman', '28687 Mallard Hill', 'c66', 'Napnapan', 'CA','55555', '10/30/1998',
                    '63-(829)189-2968', 'White', 'Male', '', 'central']
 
         null = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', '', 'Oliver Coleman',
-                '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                 'White', 'Male', '', 'central']
 
         rows = [notnull, null]
@@ -38,15 +38,15 @@ class Test_database_handler_insertions:
         database_handler.create_table(cursor)
 
         name1 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited',
-                 'Oliver Coleman', '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998',
+                 'Oliver Coleman', '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998',
                  '63-(829)189-2968', 'White', 'Male', '', 'central']
 
         name2 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'different name',
-                 '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                 '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                  'White', 'Male', '', 'central']
 
         name3 = ['2015-57325012', '10/11/2015', 'invalid', 'NQ4054983', '26', 'cited', 'different name',
-                 '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '10/30/1998', '63-(829)189-2968',
+                 '28687 Mallard Hill', 'c66', 'Napnapan', 'CA', '55555', '10/30/1998', '63-(829)189-2968',
                  'White', 'Male', '', 'central']
 
         rows = [name1, name2, name3, name1]
